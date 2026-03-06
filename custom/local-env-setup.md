@@ -66,6 +66,24 @@ docker exec -it nop-postgres psql -U nopuser -d nopcommerce_dev
 ```
 
 If that opens `psql`, your database is ready.
+nopCommerce PostgreSQL migrations use the `citext` extension (case-insensitive text). PostgreSQL does not enable this extension by default, so when nopCommerce tries to create a column using `citext`, PostgreSQL throws this error.
+Then inside psql run:
+
+```
+CREATE EXTENSION IF NOT EXISTS citext;
+```
+
+You should see:
+
+```
+CREATE EXTENSION
+```
+
+Then exit:
+
+```
+\q
+```
 
 ## 3) Get nopCommerce 4.90.3 source
 
