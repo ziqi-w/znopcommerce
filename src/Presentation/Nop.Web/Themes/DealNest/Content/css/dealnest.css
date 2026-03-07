@@ -115,8 +115,23 @@ textarea:focus-visible,
   background: #fff;
 }
 
+.store-search-box form {
+  display: flex;
+  align-items: stretch;
+  min-height: 56px;
+}
+
+.store-search-box .search-box-text {
+  height: 56px;
+  font-size: 20px;
+  padding-inline: 1rem;
+}
+
 .search-box .search-box-button {
   background: var(--dn-primary);
+  min-width: 120px;
+  font-size: 22px;
+  font-weight: 700;
 }
 
 .search-box .search-box-button:hover {
@@ -157,6 +172,7 @@ textarea:focus-visible,
 .header-menu .menu__item > a,
 .header-menu .menu__item > span {
   color: #fff;
+  background: transparent;
   border-radius: 0;
   text-transform: uppercase;
   font-size: 12px;
@@ -164,9 +180,33 @@ textarea:focus-visible,
   letter-spacing: 0.03em;
 }
 
+.header-menu .menu__item,
+.header-menu .menu__item.menu__item--has-children {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.header-menu .menu__item-toggle,
+.header-menu .menu__item .menu__item-toggle {
+  color: #fff;
+  background: transparent;
+}
+
 .header-menu .menu__item:hover > a,
 .header-menu .menu__item:hover > span {
   background: rgba(255, 255, 255, 0.12);
+}
+
+.header-menu .sublist,
+.header-menu .menu-dropdown--active {
+  background: #fff;
+}
+
+.header-menu .sublist .menu__item > a,
+.header-menu .sublist .menu__item > span {
+  color: var(--dn-text-primary);
+  text-transform: none;
+  font-size: 14px;
 }
 
 .dealnest-home .page-body {
@@ -416,6 +456,84 @@ textarea:focus-visible,
   font-weight: 600;
 }
 
+/* Product details page refinements */
+.product-details-page .page-body {
+  display: grid;
+  gap: var(--dn-space-4);
+}
+
+.product-details-page .product-essential {
+  background: #fff;
+  border: 1px solid var(--dn-border);
+  box-shadow: var(--dn-shadow);
+  padding: clamp(1rem, 2.2vw, 2rem);
+}
+
+.product-details-page .gallery,
+.product-details-page .overview {
+  padding: 0;
+}
+
+.product-details-page .overview .product-name h1 {
+  line-height: 1.2;
+  color: var(--dn-text-primary);
+}
+
+.product-details-page .overview .prices {
+  margin: var(--dn-space-3) 0;
+  padding: var(--dn-space-3);
+  background: #f8fafc;
+  border: 1px solid var(--dn-border);
+}
+
+.product-details-page .overview-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dn-space-2);
+  margin-top: var(--dn-space-3);
+}
+
+.product-details-page .overview-buttons > * {
+  margin: 0;
+}
+
+.product-details-page .add-to-cart {
+  margin-top: var(--dn-space-3);
+  padding-top: var(--dn-space-3);
+  border-top: 1px solid var(--dn-border);
+}
+
+.product-details-page .add-to-cart-panel {
+  display: flex;
+  align-items: center;
+  gap: var(--dn-space-2);
+}
+
+.product-details-page .qty-input,
+.product-details-page .add-to-cart-panel .qty-input {
+  min-height: 44px;
+}
+
+.product-details-page .product-review-box,
+.product-details-page .product-reviews-content,
+.product-details-page .product-reviews-overview,
+.product-details-page .product-specs-box,
+.product-details-page .product-tags-box {
+  background: #fff;
+  border: 1px solid var(--dn-border);
+  box-shadow: var(--dn-shadow);
+  padding: var(--dn-space-3);
+}
+
+.product-details-page .full-description,
+.product-details-page .product-collateral {
+  padding: var(--dn-space-3);
+}
+
+.product-details-page .product-share-button {
+  margin-top: var(--dn-space-3);
+}
+
 @media (max-width: 1000px) {
   .dealnest-showcase-grid {
     grid-template-columns: 1fr;
@@ -432,5 +550,16 @@ textarea:focus-visible,
   .dealnest-products,
   .dealnest-brands {
     padding: var(--dn-space-3);
+  }
+
+  .store-search-box form,
+  .store-search-box .search-box-text {
+    min-height: 48px;
+    height: 48px;
+  }
+
+  .store-search-box .search-box-button {
+    min-width: 96px;
+    font-size: 18px;
   }
 }
