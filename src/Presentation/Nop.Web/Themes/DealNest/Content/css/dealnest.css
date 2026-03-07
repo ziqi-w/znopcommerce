@@ -47,7 +47,7 @@ textarea:focus-visible,
 }
 
 .master-wrapper-content {
-  padding-top: var(--dn-space-4);
+  padding-top: var(--dn-space-3);
 }
 
 .button-1,
@@ -82,13 +82,20 @@ textarea:focus-visible,
 }
 
 .header-upper {
-  background: var(--dn-section-bg);
+  background: #f0f2f4;
   border-bottom: 1px solid var(--dn-border);
+  min-height: 44px;
+}
+
+.header-upper .header-links a,
+.header-upper .header-links span {
+  color: #374151;
+  font-size: 13px;
 }
 
 .header-lower {
   gap: var(--dn-space-4);
-  padding: 1.25rem 0;
+  padding: 1rem 0;
 }
 
 .header-logo img {
@@ -103,7 +110,7 @@ textarea:focus-visible,
 }
 
 .search-box form {
-  border-radius: 999px;
+  border-radius: 2px;
   border: 1px solid var(--dn-border);
   background: #fff;
 }
@@ -117,15 +124,28 @@ textarea:focus-visible,
 }
 
 .header-menu {
-  background: transparent;
-  margin-top: var(--dn-space-3);
+  background: var(--dn-primary);
+  margin-top: 0;
 }
 
 .header-menu .menu-container {
-  background: var(--dn-primary);
-  border-radius: var(--dn-radius);
-  padding: var(--dn-space-2);
-  box-shadow: var(--dn-shadow);
+  max-width: 1360px;
+  margin: 0 auto;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+.header-menu .menu__toggle {
+  background: #0b5f59;
+  color: #fff;
+  padding: 0 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.header-menu .menu {
+  background: transparent;
 }
 
 .menu__toggle,
@@ -136,11 +156,80 @@ textarea:focus-visible,
 
 .header-menu .menu__item > a,
 .header-menu .menu__item > span {
-  border-radius: var(--dn-radius-sm);
+  color: #fff;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.header-menu .menu__item:hover > a,
+.header-menu .menu__item:hover > span {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dealnest-home .page-body {
+  display: grid;
+  gap: var(--dn-space-4);
 }
 
 .dealnest-section {
-  margin-bottom: var(--dn-space-5);
+  margin: 0;
+}
+
+.dealnest-showcase {
+  background: transparent;
+}
+
+.dealnest-showcase-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+  gap: var(--dn-space-3);
+  align-items: start;
+}
+
+.dealnest-showcase-sidebar,
+.dealnest-showcase-main {
+  min-width: 0;
+}
+
+.dealnest-category-sidebar {
+  background: #fff;
+  border: 1px solid var(--dn-border);
+  box-shadow: var(--dn-shadow);
+}
+
+.dealnest-category-sidebar .sidebar-title {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--dn-primary);
+}
+
+.dealnest-category-sidebar .sidebar-category-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dealnest-category-sidebar .sidebar-category-list li + li {
+  border-top: 1px solid var(--dn-border);
+}
+
+.dealnest-category-sidebar .sidebar-category-list a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #4b5563;
+  font-size: 14px;
+}
+
+.dealnest-category-sidebar .sidebar-category-list a:hover {
+  color: var(--dn-primary);
+  background: #f9fafb;
 }
 
 .dealnest-hero,
@@ -148,12 +237,11 @@ textarea:focus-visible,
 .dealnest-promo,
 .dealnest-trust,
 .dealnest-products,
-.dealnest-categories {
+.dealnest-brands {
   background: var(--dn-card-bg);
   border: 1px solid var(--dn-border);
-  border-radius: var(--dn-radius);
   box-shadow: var(--dn-shadow);
-  padding: var(--dn-space-4);
+  padding: var(--dn-space-3);
 }
 
 .dealnest-hero {
@@ -163,14 +251,16 @@ textarea:focus-visible,
 .dealnest-hero .slider-wrapper,
 .dealnest-hero .nivoSlider,
 .dealnest-hero .theme-custom {
-  border-radius: var(--dn-radius-sm);
   overflow: hidden;
+}
+
+.dealnest-welcome {
+  margin-top: var(--dn-space-3);
 }
 
 .dealnest-welcome .topic-block {
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
   border: 1px solid var(--dn-border);
-  border-radius: var(--dn-radius-sm);
   padding: clamp(1rem, 2vw, 1.75rem);
 }
 
@@ -184,26 +274,29 @@ textarea:focus-visible,
   color: var(--dn-text-secondary);
 }
 
+.dealnest-products .product-grid > .title {
+  margin-bottom: 0.9rem;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #1f2937;
+}
+
 .home-page-category-grid .item-box,
 .product-grid .item-box,
 .product-list .item-box,
 .block,
 .news-items,
 .forum-breadcrumb {
-  border-radius: var(--dn-radius);
-}
-
-.home-page-category-grid .item-box {
-  border: 1px solid var(--dn-border);
-  background: #fff;
+  border-radius: 0;
 }
 
 .product-grid .item-box,
 .product-list .item-box {
   background: var(--dn-card-bg);
-  box-shadow: var(--dn-shadow);
   border: 1px solid var(--dn-border);
   overflow: hidden;
+  box-shadow: none;
 }
 
 .product-item .picture {
@@ -252,6 +345,7 @@ textarea:focus-visible,
   gap: var(--dn-space-2);
   margin: 0;
   padding: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .dealnest-benefits li {
@@ -262,15 +356,19 @@ textarea:focus-visible,
   font-weight: 500;
   background: #fff;
   border: 1px solid var(--dn-border);
-  border-radius: var(--dn-radius-sm);
   padding: var(--dn-space-3);
 }
 
 .dealnest-promo-card {
   padding: var(--dn-space-4);
-  background: linear-gradient(180deg, #fff, #fff7ed);
-  border: 1px solid #fed7aa;
-  border-radius: var(--dn-radius-sm);
+  background: linear-gradient(110deg, #11a9be 0%, #0f766e 100%);
+  color: #fff;
+}
+
+.dealnest-promo-card h2,
+.dealnest-promo-card p,
+.dealnest-promo-card a {
+  color: #fff;
 }
 
 .home-page .news-list-homepage {
@@ -309,7 +407,6 @@ textarea:focus-visible,
 .order-list-page {
   background: var(--dn-card-bg);
   border: 1px solid var(--dn-border);
-  border-radius: var(--dn-radius);
   box-shadow: var(--dn-shadow);
 }
 
@@ -320,12 +417,12 @@ textarea:focus-visible,
 }
 
 @media (max-width: 1000px) {
-  .header-upper {
-    border-bottom: 1px solid var(--dn-border);
+  .dealnest-showcase-grid {
+    grid-template-columns: 1fr;
   }
 
-  .dealnest-section {
-    margin-bottom: var(--dn-space-4);
+  .dealnest-benefits {
+    grid-template-columns: 1fr;
   }
 
   .dealnest-hero,
@@ -333,7 +430,7 @@ textarea:focus-visible,
   .dealnest-promo,
   .dealnest-trust,
   .dealnest-products,
-  .dealnest-categories {
+  .dealnest-brands {
     padding: var(--dn-space-3);
   }
 }

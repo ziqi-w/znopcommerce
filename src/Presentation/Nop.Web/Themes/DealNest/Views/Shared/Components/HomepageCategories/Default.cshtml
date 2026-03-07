@@ -1,0 +1,21 @@
+@model IList<CategoryModel>
+
+@using Nop.Core.Domain.Catalog
+
+@* DealNest override: render homepage categories as a compact vertical list for marketplace-style landing layout. *@
+@if (Model.Count > 0)
+{
+    <aside class="dealnest-category-sidebar" aria-label="@T("Categories")">
+        <h2 class="sidebar-title">@T("Categories")</h2>
+        <ul class="sidebar-category-list" role="list">
+            @foreach (var item in Model)
+            {
+                <li>
+                    <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                        @item.Name
+                    </a>
+                </li>
+            }
+        </ul>
+    </aside>
+}

@@ -22,22 +22,24 @@
     NopHtml.AppendPageCssClassParts("dealnest-home-page");
 }
 
-@* DealNest override: section wrappers make homepage areas easier to style without store-specific logic. *@
+@* DealNest override: marketplace-style homepage layout while keeping widget zones and nop components intact. *@
 <div class="page home-page dealnest-home">
     <div class="page-body">
-        <section class="dealnest-section dealnest-hero" aria-label="Hero section">
-            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
-        </section>
-
-        <section class="dealnest-section dealnest-welcome" aria-label="Welcome message">
-            @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
-        </section>
-
-        <section class="dealnest-section dealnest-categories" aria-label="Featured categories">
-            @* Keep this extension point close to categories for plugin compatibility. *@
-            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
-            @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
-            @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+        <section class="dealnest-section dealnest-showcase" aria-label="Featured showcase">
+            <div class="dealnest-showcase-grid">
+                <div class="dealnest-showcase-sidebar">
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+                    @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+                </div>
+                <div class="dealnest-showcase-main">
+                    <div class="dealnest-hero" aria-label="Hero section">
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+                    </div>
+                    <div class="dealnest-welcome" aria-label="Welcome message">
+                        @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section class="dealnest-section dealnest-products" aria-label="Featured products">
@@ -49,8 +51,8 @@
 
         <section class="dealnest-section dealnest-promo" aria-label="Promotions">
             <div class="dealnest-promo-card">
-                <h2>Deals worth checking daily</h2>
-                <p>Use this area for campaign banners, urgency messaging, or plugin widgets.</p>
+                <h2>Last chance deals — save more this week</h2>
+                <p>Use this strip for campaign highlights, flash deals, or plugin-driven promotion widgets.</p>
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
                 @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
             </div>
@@ -62,12 +64,13 @@
                 <li><span aria-hidden="true">🔒</span> Secure checkout</li>
                 <li><span aria-hidden="true">💬</span> Friendly support</li>
             </ul>
+            @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
             @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
         </section>
 
         <section class="dealnest-section dealnest-brands" aria-label="Brands and newsletter">
-            @* Placeholder area for a manufacturer/brand carousel widget integration. *@
+            @* Placeholder area for manufacturer/brand carousel widgets, newsletters, and custom blocks. *@
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
         </section>
     </div>
