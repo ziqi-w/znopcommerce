@@ -1,0 +1,70 @@
+@using Nop.Services.Localization
+@using Nop.Core
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+
+@{
+    Layout = "_ColumnsOne";
+
+    var homepageTitle = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageTitle);
+    if (!string.IsNullOrEmpty(homepageTitle))
+    {
+        NopHtml.AddTitleParts(homepageTitle);
+    }
+
+    var homepageDescription = await localizationService.GetLocalizedAsync(await storeContext.GetCurrentStoreAsync(), s => s.HomepageDescription);
+    if (!string.IsNullOrEmpty(homepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(homepageDescription);
+    }
+
+    NopHtml.AppendPageCssClassParts("html-home-page");
+    NopHtml.AppendPageCssClassParts("dealnest-home-page");
+}
+
+@* DealNest override: section wrappers make homepage areas easier to style without store-specific logic. *@
+<div class="page home-page dealnest-home">
+    <div class="page-body">
+        <section class="dealnest-section dealnest-hero" aria-label="Hero section">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+            @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+        </section>
+
+        <section class="dealnest-section dealnest-categories" aria-label="Featured categories">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+            @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+            @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+        </section>
+
+        <section class="dealnest-section dealnest-products" aria-label="Featured products">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+            @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+            @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+        </section>
+
+        <section class="dealnest-section dealnest-promo" aria-label="Promotions">
+            <div class="dealnest-promo-card">
+                <h2>Deals worth checking daily</h2>
+                <p>Use this area for campaign banners, urgency messaging, or plugin widgets.</p>
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
+                @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
+            </div>
+        </section>
+
+        <section class="dealnest-section dealnest-trust" aria-label="Trust and benefits">
+            <ul class="dealnest-benefits" role="list">
+                <li><span aria-hidden="true">🚚</span> Fast NZ-wide delivery</li>
+                <li><span aria-hidden="true">🔒</span> Secure checkout</li>
+                <li><span aria-hidden="true">💬</span> Friendly support</li>
+            </ul>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
+            @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
+        </section>
+
+        <section class="dealnest-section dealnest-brands" aria-label="Brands and newsletter">
+            @* Placeholder area for a manufacturer/brand carousel widget integration. *@
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+        </section>
+    </div>
+</div>
