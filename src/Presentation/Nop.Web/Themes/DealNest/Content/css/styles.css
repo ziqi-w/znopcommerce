@@ -2,4 +2,4 @@
   DealNest baseline stylesheet.
   We keep the DefaultClean CSS as the base and layer customizations in dealnest.css.
 */
-@import url("../../DefaultClean/Content/css/styles.css");
+@import url("../../../DefaultClean/Content/css/styles.css");
