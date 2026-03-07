@@ -122,20 +122,33 @@ textarea:focus-visible,
 }
 
 .store-search-box .search-box-text {
+  flex: 1 1 auto;
+  width: 100% !important;
+  min-width: 0;
   height: 56px;
   font-size: 20px;
+  font-weight: 500;
   padding-inline: 1rem;
+  border: 0;
+  line-height: 1.2;
 }
 
 .search-box .search-box-button {
-  background: var(--dn-primary);
-  min-width: 120px;
-  font-size: 22px;
+  background: linear-gradient(180deg, var(--dn-accent) 0%, var(--dn-accent-hover) 100%);
+  border: 0;
+  border-radius: 10px;
+  min-width: 136px;
+  padding-inline: 1.25rem;
+  margin: 6px;
+  font-size: 18px;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 18px rgba(249, 115, 22, 0.3);
 }
 
 .search-box .search-box-button:hover {
-  background: var(--dn-primary-hover);
+  background: linear-gradient(180deg, #fb923c 0%, var(--dn-accent-hover) 100%);
 }
 
 .header-menu {
@@ -169,8 +182,8 @@ textarea:focus-visible,
   min-height: 44px;
 }
 
-.header-menu .menu__item > a,
-.header-menu .menu__item > span {
+.header-menu .menu > .menu__item > .menu__link,
+.header-menu .menu > .menu__item > .menu__item-toggle > .menu__link {
   color: #fff;
   background: transparent;
   border-radius: 0;
@@ -192,21 +205,25 @@ textarea:focus-visible,
   background: transparent;
 }
 
-.header-menu .menu__item:hover > a,
-.header-menu .menu__item:hover > span {
+.header-menu .menu > .menu__item:hover > .menu__link,
+.header-menu .menu > .menu__item:hover > .menu__item-toggle > .menu__link {
   background: rgba(255, 255, 255, 0.12);
 }
 
+.header-menu .menu__list-view,
 .header-menu .sublist,
 .header-menu .menu-dropdown--active {
   background: #fff;
 }
 
-.header-menu .sublist .menu__item > a,
-.header-menu .sublist .menu__item > span {
+.header-menu .menu__list-view .menu__link,
+.header-menu .sublist .menu__link,
+.header-menu .menu__list-view .menu__item-toggle > .menu__link {
   color: var(--dn-text-primary);
   text-transform: none;
   font-size: 14px;
+  font-weight: 500;
+  letter-spacing: normal;
 }
 
 .dealnest-home .page-body {
@@ -559,7 +576,8 @@ textarea:focus-visible,
   }
 
   .store-search-box .search-box-button {
-    min-width: 96px;
-    font-size: 18px;
+    min-width: 104px;
+    margin: 4px;
+    font-size: 15px;
   }
 }
