@@ -27,10 +27,14 @@
     <div class="page-body">
         <section class="dealnest-section dealnest-hero" aria-label="Hero section">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+        </section>
+
+        <section class="dealnest-section dealnest-welcome" aria-label="Welcome message">
             @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
         </section>
 
         <section class="dealnest-section dealnest-categories" aria-label="Featured categories">
+            @* Keep this extension point close to categories for plugin compatibility. *@
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
             @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
             @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))

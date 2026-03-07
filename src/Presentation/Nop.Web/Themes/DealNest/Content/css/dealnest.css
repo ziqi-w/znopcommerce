@@ -46,6 +46,10 @@ textarea:focus-visible,
   max-width: 1360px;
 }
 
+.master-wrapper-content {
+  padding-top: var(--dn-space-4);
+}
+
 .button-1,
 .button-2,
 .write-review .button-1,
@@ -74,11 +78,21 @@ textarea:focus-visible,
 .header.dealnest-header {
   background: var(--dn-card-bg);
   border-bottom: 1px solid var(--dn-border);
+  box-shadow: 0 2px 12px rgba(17, 24, 39, 0.04);
+}
+
+.header-upper {
+  background: var(--dn-section-bg);
+  border-bottom: 1px solid var(--dn-border);
 }
 
 .header-lower {
   gap: var(--dn-space-4);
-  padding: var(--dn-space-3) 0;
+  padding: 1.25rem 0;
+}
+
+.header-logo img {
+  max-height: 56px;
 }
 
 .header-sticky {
@@ -103,7 +117,15 @@ textarea:focus-visible,
 }
 
 .header-menu {
+  background: transparent;
+  margin-top: var(--dn-space-3);
+}
+
+.header-menu .menu-container {
   background: var(--dn-primary);
+  border-radius: var(--dn-radius);
+  padding: var(--dn-space-2);
+  box-shadow: var(--dn-shadow);
 }
 
 .menu__toggle,
@@ -112,31 +134,54 @@ textarea:focus-visible,
   min-height: 44px;
 }
 
+.header-menu .menu__item > a,
+.header-menu .menu__item > span {
+  border-radius: var(--dn-radius-sm);
+}
+
 .dealnest-section {
   margin-bottom: var(--dn-space-5);
 }
 
-.dealnest-hero .topic-block,
-.dealnest-promo-card,
-.dealnest-trust {
+.dealnest-hero,
+.dealnest-welcome,
+.dealnest-promo,
+.dealnest-trust,
+.dealnest-products,
+.dealnest-categories {
   background: var(--dn-card-bg);
   border: 1px solid var(--dn-border);
   border-radius: var(--dn-radius);
   box-shadow: var(--dn-shadow);
+  padding: var(--dn-space-4);
 }
 
-.dealnest-hero .topic-block {
-  padding: clamp(1.25rem, 2.5vw, 2.5rem);
-  background-image: linear-gradient(120deg, rgba(15, 118, 110, 0.95), rgba(17, 94, 89, 0.9)), url("../images/hero-placeholder.svg");
-  background-size: cover;
-  background-position: center;
-  color: #fff;
+.dealnest-hero {
+  overflow: hidden;
 }
 
-.dealnest-hero .topic-block-title,
-.dealnest-hero .topic-block-body,
-.dealnest-hero .topic-block a {
-  color: #fff;
+.dealnest-hero .slider-wrapper,
+.dealnest-hero .nivoSlider,
+.dealnest-hero .theme-custom {
+  border-radius: var(--dn-radius-sm);
+  overflow: hidden;
+}
+
+.dealnest-welcome .topic-block {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid var(--dn-border);
+  border-radius: var(--dn-radius-sm);
+  padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.dealnest-welcome .topic-block-title {
+  color: var(--dn-text-primary);
+  margin-bottom: var(--dn-space-2);
+}
+
+.dealnest-welcome .topic-block-body,
+.dealnest-welcome .topic-block a {
+  color: var(--dn-text-secondary);
 }
 
 .home-page-category-grid .item-box,
@@ -146,6 +191,11 @@ textarea:focus-visible,
 .news-items,
 .forum-breadcrumb {
   border-radius: var(--dn-radius);
+}
+
+.home-page-category-grid .item-box {
+  border: 1px solid var(--dn-border);
+  background: #fff;
 }
 
 .product-grid .item-box,
@@ -201,7 +251,7 @@ textarea:focus-visible,
   display: grid;
   gap: var(--dn-space-2);
   margin: 0;
-  padding: var(--dn-space-4);
+  padding: 0;
 }
 
 .dealnest-benefits li {
@@ -210,11 +260,17 @@ textarea:focus-visible,
   gap: var(--dn-space-2);
   color: var(--dn-text-primary);
   font-weight: 500;
+  background: #fff;
+  border: 1px solid var(--dn-border);
+  border-radius: var(--dn-radius-sm);
+  padding: var(--dn-space-3);
 }
 
 .dealnest-promo-card {
   padding: var(--dn-space-4);
   background: linear-gradient(180deg, #fff, #fff7ed);
+  border: 1px solid #fed7aa;
+  border-radius: var(--dn-radius-sm);
 }
 
 .home-page .news-list-homepage {
@@ -272,7 +328,12 @@ textarea:focus-visible,
     margin-bottom: var(--dn-space-4);
   }
 
-  .dealnest-benefits {
+  .dealnest-hero,
+  .dealnest-welcome,
+  .dealnest-promo,
+  .dealnest-trust,
+  .dealnest-products,
+  .dealnest-categories {
     padding: var(--dn-space-3);
   }
 }
