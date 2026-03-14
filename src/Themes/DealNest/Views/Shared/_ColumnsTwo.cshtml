@@ -1,0 +1,81 @@
+@* Custom theme two-column override with a mobile-friendly filter drawer trigger. *@
+@{
+    Layout = "_Root";
+}
+@{
+    var currentCategoryId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("catalog", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("category", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentCategoryId = Convert.ToInt32(Url.ActionContext.RouteData.Values["categoryId"].ToString());
+    }
+
+    var currentManufacturerId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("catalog", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("manufacturer", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentManufacturerId = Convert.ToInt32(Url.ActionContext.RouteData.Values["manufacturerId"].ToString());
+    }
+
+    var currentProductId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("product", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("productdetails", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentProductId = Convert.ToInt32(Url.ActionContext.RouteData.Values["productId"].ToString());
+    }
+
+    var filterResultsHeading = T("Filtering.FilterResults").Text;
+    if (string.Equals(filterResultsHeading, "Filtering.FilterResults", StringComparison.OrdinalIgnoreCase) ||
+        (filterResultsHeading.Contains('.', StringComparison.Ordinal) && !filterResultsHeading.Contains(' ')))
+    {
+        filterResultsHeading = "Filters";
+    }
+
+    var sidebarHeading = IsSectionDefined("left")
+        ? T("Account.Navigation").Text
+        : filterResultsHeading;
+}
+
+@await RenderSectionAsync("Breadcrumb", false)
+
+<section class="content-shell content-shell--two-column">
+    <div class="content-shell__inner">
+        <button type="button" class="catalog-filter-toggle button-2" data-dealnest-filter-toggle aria-controls="catalog-sidebar" aria-expanded="false">
+            @sidebarHeading
+        </button>
+        <div class="catalog-layout">
+            <aside class="side-2" id="catalog-sidebar" aria-label="@sidebarHeading">
+                <div class="sidebar-card">
+                    <div class="sidebar-card__header">
+                        <h2>@sidebarHeading</h2>
+                        <button type="button" class="sidebar-card__close" data-dealnest-filter-close aria-label="@T("Common.Close")">×</button>
+                    </div>
+                    @if (IsSectionDefined("left"))
+                    {
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
+                        @await RenderSectionAsync("left")
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
+                    }
+                    else
+                    {
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
+                        @await RenderSectionAsync("CatalogFilters", false)
+                        @await Component.InvokeAsync(typeof(CategoryNavigationViewComponent), new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnAfterCategoryNavigation })
+                        @await Component.InvokeAsync(typeof(ManufacturerNavigationViewComponent), new { currentManufacturerId = currentManufacturerId })
+                        @await Component.InvokeAsync(typeof(VendorNavigationViewComponent))
+                        @await Component.InvokeAsync(typeof(RecentlyViewedProductsBlockViewComponent), new { productThumbPictureSize = 64 })
+                        @await Component.InvokeAsync(typeof(PopularProductTagsViewComponent))
+                        @await Component.InvokeAsync(typeof(PollBlockViewComponent), new { systemKeyword = "LeftColumnPoll" })
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
+                    }
+                </div>
+            </aside>
+            <section class="center-2">
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MainColumnBefore })
+                @RenderBody()
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MainColumnAfter })
+            </section>
+        </div>
+    </div>
+</section>

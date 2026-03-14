@@ -1,0 +1,23 @@
+@model ManufacturerNavigationModel
+
+@using Nop.Core.Domain.Catalog
+
+@if (Model.Manufacturers.Count > 0)
+{
+    <section class="block block-manufacturer-navigation">
+        <div class="manufacturer-strip">
+            @foreach (var manufacturer in Model.Manufacturers)
+            {
+                <a class="manufacturer-pill @(manufacturer.IsActive ? "active" : null)" href="@(await NopUrl.RouteGenericUrlAsync<Manufacturer>(new { SeName = manufacturer.SeName }))">
+                    @manufacturer.Name
+                </a>
+            }
+            @if (Model.TotalManufacturers > Model.Manufacturers.Count)
+            {
+                <a class="manufacturer-pill manufacturer-pill--all" href="@Url.RouteUrl(NopRouteNames.General.MANUFACTURERS)">
+                    @T("Manufacturers.ViewAll")
+                </a>
+            }
+        </div>
+    </section>
+}

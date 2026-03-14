@@ -1,0 +1,46 @@
+@* Custom theme header override for DealNest layout and utility messaging. *@
+<header class="header">
+    <a class="skip" href="#main">@T("Header.SkipNavigation.Text")</a>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
+
+    <div class="header-announcement">
+        <div class="header-announcement__inner">
+            <span>Fast-moving deals, everyday catalogue clarity.</span>
+            <span>Built for promotions, resale, and general retail.</span>
+            <span>Optimized for mobile shoppers first.</span>
+        </div>
+    </div>
+
+    <div class="header-utility">
+        <div class="header-utility__inner">
+            <div class="header-selectors-wrapper">
+                @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
+                @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
+                @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+            </div>
+            <div class="header-utility__meta">
+                <span class="utility-pill">Secure checkout</span>
+                <span class="utility-pill">Fast dispatch</span>
+                <span class="utility-pill">Clear pricing</span>
+            </div>
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
+
+    <div class="header-main">
+        <div class="header-logo">
+            @await Component.InvokeAsync(typeof(LogoViewComponent))
+        </div>
+        <div role="search" class="search-box store-search-box">
+            @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+        </div>
+        <div class="header-actions">
+            @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+            @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+        </div>
+    </div>
+
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
+</header>

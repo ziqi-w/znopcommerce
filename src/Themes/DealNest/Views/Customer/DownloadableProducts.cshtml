@@ -1,0 +1,103 @@
+@model CustomerDownloadableProductsModel
+
+@using Nop.Core.Domain.Catalog
+
+@{
+    Layout = "_ColumnsTwo";
+
+    // Custom theme override: adds data labels and button classes so downloadable items stay readable on mobile.
+    NopHtml.AddTitleParts(T("PageTitle.Account").Text);
+    NopHtml.AppendPageCssClassParts("html-account-page");
+    NopHtml.AppendPageCssClassParts("html-downloadable-products-page");
+}
+@section left
+{
+    @await Component.InvokeAsync(typeof(CustomerNavigationViewComponent), new { selectedTabId = CustomerNavigationEnum.DownloadableProducts })
+}
+<div class="page account-page downloadable-products-page">
+    <div class="page-title">
+        <h1>@T("Account.MyAccount") - @T("Account.DownloadableProducts")</h1>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CustomerDownloadableProductsTop, additionalData = Model })
+        @if (Model.Items.Count > 0)
+        {
+            <div class="table-wrapper">
+                <table class="data-table downloadable-products-table">
+                    <colgroup>
+                        <col width="1" />
+                        <col width="1" />
+                        <col />
+                        <col width="1" />
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th class="order">
+                                @T("DownloadableProducts.Fields.Order")
+                            </th>
+                            <th class="date">
+                                @T("DownloadableProducts.Fields.Date")
+                            </th>
+                            <th class="product">
+                                @T("DownloadableProducts.Fields.Product")
+                            </th>
+                            <th class="download">
+                                @T("DownloadableProducts.Fields.Download")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Items.Count; i++)
+                        {
+                            var item = Model.Items[i];
+                            <tr @(i % 2 == 0 ? Html.Raw(" class=\"odd\"") : Html.Raw(" class=\"even\""))>
+                                <td class="order" data-label="@T("DownloadableProducts.Fields.Order")">
+                                    <a href="@Url.RouteUrl(NopRouteNames.Standard.ORDER_DETAILS, new { orderId = item.OrderId })">@item.CustomOrderNumber</a>
+                                </td>
+                                <td class="date" data-label="@T("DownloadableProducts.Fields.Date")">
+                                    @item.CreatedOn.ToString("d")
+                                </td>
+                                <td class="product" data-label="@T("DownloadableProducts.Fields.Product")">
+                                    <a href="@(await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = item.ProductSeName }))">@item.ProductName</a>
+                                    @if (!string.IsNullOrEmpty(item.ProductAttributes))
+                                    {
+                                        <div class="attributes">
+                                            @Html.Raw(item.ProductAttributes)
+                                        </div>
+                                    }
+                                </td>
+                                <td class="download" data-label="@T("DownloadableProducts.Fields.Download")">
+                                    <div class="downloadable-products-actions">
+                                        @if (item.DownloadId > 0)
+                                        {
+                                            <a class="button-1 downloadable-products-page__action downloadable-products-page__action--download" href="@Url.RouteUrl(NopRouteNames.Standard.GET_DOWNLOAD, new { orderItemId = item.OrderItemGuid })">
+                                                @T("DownloadableProducts.Fields.Download")
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="downloadable-products-page__na">@T("DownloadableProducts.Fields.Download.NA")</span>
+                                        }
+                                        @if (item.LicenseId > 0)
+                                        {
+                                            <a class="button-2 downloadable-products-page__action downloadable-products-page__action--license" href="@Url.RouteUrl(NopRouteNames.Standard.GET_LICENSE, new { orderItemId = item.OrderItemGuid })">
+                                                @T("DownloadableProducts.Fields.DownloadLicense")
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="no-data">
+                @T("DownloadableProducts.NoItems")
+            </div>
+        }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CustomerDownloadableProductsBottom, additionalData = Model })
+    </div>
+</div>

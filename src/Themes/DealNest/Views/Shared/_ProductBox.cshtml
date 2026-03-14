@@ -1,0 +1,153 @@
+@model ProductOverviewModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+
+@{
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    var addToCartLink = Model.ProductPrice.ForceRedirectionAfterAddingToCart
+        ? Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId, quantity, forceredirection = true })
+        : Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId, quantity });
+    var addToWishlistLink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity });
+    var addToCompareLink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });
+    var picture = Model.PictureModels.FirstOrDefault();
+
+    var compareValue = Model.ProductPrice.OldPriceValue ?? Model.ProductPrice.PriceValue;
+    var currentValue = Model.ProductPrice.PriceWithDiscountValue ?? Model.ProductPrice.PriceValue;
+    var hasSavings = compareValue.HasValue && currentValue.HasValue && compareValue.Value > currentValue.Value && currentValue.Value > 0;
+    var savingsPercent = hasSavings
+        ? (int)Math.Round(((compareValue.Value - currentValue.Value) / compareValue.Value) * 100m, MidpointRounding.AwayFromZero)
+        : 0;
+}
+
+@* Custom theme product card override with deal-focused pricing and lighter media handling. *@
+<article class="product-item" data-productid="@Model.Id">
+    @if (!Model.ProductPrice.DisableWishlistButton)
+    {
+        @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
+    }
+    <div class="picture">
+        <a href="@(await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName }))" title="@picture?.Title">
+            <img alt="@picture?.AlternateText" src="@picture?.ImageUrl" title="@picture?.Title" loading="lazy" decoding="async" />
+        </a>
+        @if (hasSavings && savingsPercent > 0)
+        {
+            <span class="product-badge product-badge--deal">@T("ShoppingCart.ItemYouSave", $"{savingsPercent}%")</span>
+        }
+        else if (Model.MarkAsNew)
+        {
+            <span class="product-badge product-badge--new">@T("Products.NewProducts")</span>
+        }
+        @if (!Model.ProductPrice.DisableWishlistButton || !Model.ProductPrice.DisableAddToCompareListButton)
+        {
+            <div class="product-media-actions">
+                @if (!Model.ProductPrice.DisableWishlistButton)
+                {
+                    <button type="button" class="button-2 product-media-action add-to-wishlist-button" title="@T("ShoppingCart.AddToWishlist")" aria-label="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addToWishlistLink');return false;">
+                        <span class="sr-only">@T("ShoppingCart.AddToWishlist")</span>
+                    </button>
+                }
+
+                @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                {
+                    <button type="button" class="button-2 product-media-action add-to-compare-list-button" title="@T("ShoppingCart.AddToCompareList")" aria-label="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addToCompareLink');return false;">
+                        <span class="sr-only">@T("ShoppingCart.AddToCompareList")</span>
+                    </button>
+                }
+            </div>
+        }
+    </div>
+    <div class="details">
+        <h3 class="product-title">
+            <a href="@(await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName }))">@Model.Name</a>
+        </h3>
+
+        @if (catalogSettings.ShowSkuOnCatalogPages && !string.IsNullOrEmpty(Model.Sku))
+        {
+            <div class="sku">@Model.Sku</div>
+        }
+
+        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+        {
+            var ratingPercent = Model.ReviewOverviewModel.TotalReviews == 0
+                ? 0
+                : ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
+
+            <div class="product-rating-box" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
+                <div class="rating">
+                    <div style="width: @(ratingPercent)%"></div>
+                </div>
+                <span class="rating-count">@Model.ReviewOverviewModel.TotalReviews</span>
+            </div>
+        }
+
+        <div class="description" @(catalogSettings.ShowShortDescriptionOnCatalogPages ? "" : "data-short-description=none")>
+            @Html.Raw(Model.ShortDescription)
+        </div>
+
+        <div class="add-info">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
+            <div class="prices">
+                @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                {
+                    <span class="price old-price">@Model.ProductPrice.OldPrice</span>
+                }
+                else if (!string.IsNullOrEmpty(Model.ProductPrice.PriceWithDiscount))
+                {
+                    <span class="price old-price">@Model.ProductPrice.Price</span>
+                }
+
+                <span class="price actual-price">@Html.Raw(!string.IsNullOrEmpty(Model.ProductPrice.PriceWithDiscount) ? Model.ProductPrice.PriceWithDiscount : Model.ProductPrice.Price)</span>
+
+                @if (Model.ProductPrice.DisplayTaxShippingInfo)
+                {
+                    var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                    <span class="tax-shipping-info">
+                        @T(inclTax ? "Products.Price.TaxShipping.InclTax" : "Products.Price.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))
+                    </span>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.ProductPrice.BasePricePAngV))
+                {
+                    <div class="base-price-pangv">
+                        @Model.ProductPrice.BasePricePAngV
+                    </div>
+                }
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
+            <div class="buttons">
+                @if (!Model.ProductPrice.DisableBuyButton)
+                {
+                    var addToCartText = T("ShoppingCart.AddToCart").Text;
+                    if (Model.ProductPrice.IsRental)
+                    {
+                        addToCartText = T("ShoppingCart.Rent").Text;
+                    }
+                    if (Model.ProductPrice.AvailableForPreOrder)
+                    {
+                        addToCartText = T("ShoppingCart.PreOrder").Text;
+                    }
+
+                    <button type="button" class="button-1 product-box-add-to-cart-button" onclick="AjaxCart.addproducttocart_catalog('@addToCartLink');return false;">@addToCartText</button>
+                }
+
+                @if (!Model.ProductPrice.DisableWishlistButton)
+                {
+                    <button type="button" class="button-2 add-to-wishlist-button" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addToWishlistLink');return false;">@T("ShoppingCart.AddToWishlist")</button>
+                }
+
+                @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                {
+                    <button type="button" class="button-2 add-to-compare-list-button" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addToCompareLink');return false;">@T("ShoppingCart.AddToCompareList")</button>
+                }
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoAfter, additionalData = Model })
+        </div>
+    </div>
+</article>

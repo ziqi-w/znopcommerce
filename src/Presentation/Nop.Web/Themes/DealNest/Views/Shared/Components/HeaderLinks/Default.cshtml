@@ -1,0 +1,202 @@
+@model HeaderLinksModel
+@using Nop.Core.Domain.Customers
+
+@inject Nop.Core.IWebHelper webHelper
+
+@* Custom theme header links override with compact action pills. *@
+<div class="header-links">
+    <ul>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderLinksBefore, additionalData = Model })
+        @if (Model.IsAuthenticated)
+        {
+            <li>
+                <a href="@Url.RouteUrl(NopRouteNames.General.CUSTOMER_INFO)" class="header-link ico-account" title="@T("Account.MyAccount")" aria-label="@T("Account.MyAccount")">
+                    <span class="header-link__label">@T("Account.MyAccount")</span>
+                </a>
+            </li>
+            <li>
+                <a href="@Url.RouteUrl(NopRouteNames.Standard.LOGOUT)" class="header-link ico-logout" title="@T("Account.Logout")" aria-label="@T("Account.Logout")">
+                    <span class="header-link__label">@T("Account.Logout")</span>
+                </a>
+            </li>
+        }
+        else
+        {
+            var returnUrl = Context.Request.Query.TryGetValue("returnUrl", out var url) && !StringValues.IsNullOrEmpty(url)
+                ? url.ToString()
+                : webHelper.GetRawUrl(Context.Request);
+
+            @if (Model.RegistrationType != UserRegistrationType.Disabled)
+            {
+                <li>
+                    <a href="@Url.RouteUrl(NopRouteNames.Standard.REGISTER, new { returnUrl })" class="header-link ico-register" title="@T("Account.Register")" aria-label="@T("Account.Register")">
+                        <span class="header-link__label">@T("Account.Register")</span>
+                    </a>
+                </li>
+            }
+            <li>
+                <a href="@Url.RouteUrl(NopRouteNames.General.LOGIN, new { returnUrl })" class="header-link ico-login" title="@T("Account.Login")" aria-label="@T("Account.Login")">
+                    <span class="header-link__label">@T("Account.Login")</span>
+                </a>
+            </li>
+        }
+        @if (Model.AllowPrivateMessages)
+        {
+            <li>
+                <a href="@Url.RouteUrl(NopRouteNames.Standard.PRIVATE_MESSAGES, new { tab = "" })" class="header-link ico-inbox" title="@T("PrivateMessages.Inbox")" aria-label="@T("PrivateMessages.Inbox")">
+                    <span class="header-link__label">@T("PrivateMessages.Inbox")</span>
+                    <span class="header-link__count">@Model.UnreadPrivateMessages</span>
+                </a>
+            </li>
+        }
+        @if (Model.WishlistEnabled)
+        {
+            <li>
+                <a href="@Url.RouteUrl(NopRouteNames.General.WISHLIST)" class="header-link ico-wishlist" title="@T("Wishlist")" aria-label="@T("Wishlist")">
+                    <span class="header-link__label">@T("Wishlist")</span>
+                    <span class="header-link__count">@Model.WishlistItems</span>
+                </a>
+            </li>
+        }
+        @if (Model.ShoppingCartEnabled)
+        {
+            <li id="topcartlink">
+                <a href="@Url.RouteUrl(NopRouteNames.General.CART)" class="header-link ico-cart" title="@T("ShoppingCart")" aria-label="@T("ShoppingCart")">
+                    <span class="header-link__label">@T("ShoppingCart")</span>
+                    <span class="header-link__count">@Model.ShoppingCartItems</span>
+                </a>
+            </li>
+        }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderLinksAfter, additionalData = Model })
+    </ul>
+
+    @if (Model.AllowPrivateMessages && !string.IsNullOrEmpty(Model.AlertMessage))
+    {
+        <script asp-location="Footer">
+            $(function() {
+                displayPopupNotification('@Html.Raw(JavaScriptEncoder.Default.Encode(Model.AlertMessage))', 'success', false);
+            });
+        </script>
+    }
+
+    @if (Model.ShoppingCartEnabled)
+    {
+        <script asp-location="Footer">
+            $(function() {
+                var hoverSelector = '#topcartlink, #flyout-cart';
+                var closeTimer = 0;
+
+                var getFlyoutCart = function() {
+                    return $('#flyout-cart');
+                };
+
+                var getHeaderActions = function() {
+                    return $('.header-actions');
+                };
+
+                var getCartLink = function() {
+                    return $('#topcartlink .header-link');
+                };
+
+                var getHoverTargets = function() {
+                    return $(hoverSelector);
+                };
+
+                var clearCloseTimer = function() {
+                    if (closeTimer) {
+                        clearTimeout(closeTimer);
+                        closeTimer = 0;
+                    }
+                };
+
+                var positionFlyoutCart = function() {
+                    var flyoutCart = getFlyoutCart();
+                    var headerActions = getHeaderActions();
+                    var cartLink = getCartLink();
+
+                    if (!flyoutCart.length || !headerActions.length || !cartLink.length) {
+                        return;
+                    }
+
+                    var restoreDisplay = false;
+
+                    if (!flyoutCart.hasClass('active')) {
+                        flyoutCart.css({
+                            display: 'block',
+                            visibility: 'hidden'
+                        });
+                        restoreDisplay = true;
+                    }
+
+                    var actionsRect = headerActions.get(0).getBoundingClientRect();
+                    var cartRect = cartLink.get(0).getBoundingClientRect();
+                    var flyoutWidth = flyoutCart.outerWidth();
+                    var viewportPadding = 12;
+                    var maxViewportLeft = Math.max(viewportPadding, window.innerWidth - viewportPadding - flyoutWidth);
+                    var desiredViewportLeft = cartRect.right - flyoutWidth;
+                    var clampedViewportLeft = Math.min(Math.max(desiredViewportLeft, viewportPadding), maxViewportLeft);
+                    var left = clampedViewportLeft - actionsRect.left;
+                    var top = cartRect.bottom - actionsRect.top + 10;
+
+                    flyoutCart.css({
+                        left: left + 'px',
+                        right: 'auto',
+                        top: top + 'px'
+                    });
+
+                    if (restoreDisplay) {
+                        flyoutCart.css({
+                            display: '',
+                            visibility: ''
+                        });
+                    }
+                };
+
+                var openFlyoutCart = function() {
+                    var flyoutCart = getFlyoutCart();
+
+                    clearCloseTimer();
+                    flyoutCart.addClass('active');
+                    positionFlyoutCart();
+                };
+
+                var scheduleCloseFlyoutCart = function() {
+                    var flyoutCart = getFlyoutCart();
+
+                    clearCloseTimer();
+                    closeTimer = setTimeout(function() {
+                        if (!getHoverTargets().find(':focus').length) {
+                            flyoutCart.removeClass('active');
+                        }
+                    }, 180);
+                };
+
+                $(document)
+                    .off('.dealnestCartFlyout')
+                    .on('mouseenter.dealnestCartFlyout focusin.dealnestCartFlyout', hoverSelector, openFlyoutCart)
+                    .on('mouseleave.dealnestCartFlyout', hoverSelector, scheduleCloseFlyoutCart)
+                    .on('focusout.dealnestCartFlyout', hoverSelector, function() {
+                        setTimeout(function() {
+                            if (!getHoverTargets().find(':focus').length) {
+                                scheduleCloseFlyoutCart();
+                            }
+                        }, 0);
+                    });
+
+                $(window).off('resize.dealnestCartFlyout').on('resize.dealnestCartFlyout', function() {
+                    var flyoutCart = getFlyoutCart();
+
+                    if (flyoutCart.hasClass('active')) {
+                        positionFlyoutCart();
+                    }
+                });
+
+                var localized_data = {
+                    AjaxCartFailure: "@T("AjaxCart.Failure")"
+                };
+
+                AjaxCart.init(@Model.UsePopupNotifications.ToString().ToLowerInvariant(), '.header-links .ico-cart .header-link__count', '.header-links .ico-wishlist .header-link__count', '#flyout-cart', localized_data);
+            });
+        </script>
+    }
+</div>
