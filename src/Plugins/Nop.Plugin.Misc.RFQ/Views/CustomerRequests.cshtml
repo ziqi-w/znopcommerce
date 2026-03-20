@@ -39,7 +39,7 @@
                         <h2 class="request-title">
                             @string.Format(T("Plugins.Misc.RFQ.RequestQuoteNumber").Text, request.Id)
                         </h2>
-                        <button type="button" class="button-2" onclick="setLocation('@Url.RouteUrl(RfqDefaults.CreateCustomerRequestRouteName, new { requestId = request.Id })')">@T("Plugins.Misc.RFQ.CustomerRequest.Info")</button>
+                        <button type="button" class="button-2" onclick="setLocation('@Url.RouteUrl(RfqDefaults.CreateCustomerRequestRouteName, new { requestId = request.Id })')">@T("Common.View")</button>
                     </div>
                     <ul class="info">
                         <li>@T("Plugins.Misc.RFQ.Fields.RequestQuote.CreatedOn"): <span>@request.CreatedOnUtc</span></li>

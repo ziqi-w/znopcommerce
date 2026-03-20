@@ -1,0 +1,64 @@
+@model FooterModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Domain.Topics
+
+@inject IWorkContext workContext
+
+@* Custom theme footer override with reusable support and newsletter columns. *@
+<footer class="footer">
+    <section class="footer-upper">
+        <div class="footer-brand">
+            <span class="eyebrow">Deal-ready storefront</span>
+            <h2>@Model.StoreName</h2>
+            <p>A clean, reusable nopCommerce theme for promotions, resale, and general ecommerce catalogues.</p>
+            <div class="footer-brand__links">
+                <a href="@Url.RouteUrl(NopRouteNames.General.CONTACT_US)">@T("ContactUs")</a>
+                <a href="@Url.RouteUrl(NopRouteNames.General.CUSTOMER_INFO)">@T("Account.MyAccount")</a>
+                <a href="@Url.RouteUrl(NopRouteNames.General.CUSTOMER_ORDERS)">@T("Account.CustomerOrders")</a>
+            </div>
+        </div>
+        <div class="footer-navigation-shell">
+            @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
+        </div>
+        <div class="footer-support">
+            <div class="footer-support__card">
+                <h2>Customer service</h2>
+                <p>Use your footer menus, topic pages, or footer widget zone to add local support numbers, returns instructions, and shipping policies.</p>
+                <ul class="footer-support__list">
+                    <li><a href="@Url.RouteUrl(NopRouteNames.General.CONTACT_US)">@T("ContactUs")</a></li>
+                    <li><a href="@Url.RouteUrl(NopRouteNames.General.CART)">@T("ShoppingCart")</a></li>
+                    <li><a href="@Url.RouteUrl(NopRouteNames.General.WISHLIST)">@T("Wishlist")</a></li>
+                </ul>
+            </div>
+            <div class="footer-social">
+                <h2>@T("Footer.FollowUs")</h2>
+                @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
+            </div>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </div>
+    </section>
+    <section class="footer-lower">
+        <div class="footer-info">
+            <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+            @if (Model.DisplayTaxShippingInfoFooter)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <span class="footer-tax-shipping">
+                    @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))
+                </span>
+            }
+        </div>
+        <div class="footer-meta">
+            @if (!Model.HidePoweredByNopCommerce)
+            {
+                <div class="footer-powered-by">
+                    Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
+                </div>
+            }
+            @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
+        </div>
+    </section>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
+</footer>

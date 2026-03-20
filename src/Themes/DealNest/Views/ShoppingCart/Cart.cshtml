@@ -1,0 +1,32 @@
+@model ShoppingCartModel
+
+@{
+    Layout = "_ColumnsOne";
+
+    NopHtml.AddTitleParts(T("PageTitle.ShoppingCart").Text);
+    NopHtml.AppendPageCssClassParts("html-shopping-cart-page");
+}
+@if (!Model.OnePageCheckoutEnabled)
+{
+    @await Component.InvokeAsync(typeof(CheckoutProgressViewComponent), new { step = CheckoutProgressStep.Cart })
+}
+@* Custom theme cart page override with a lightweight intro panel while reusing the stock order summary component. *@
+<div class="page shopping-cart-page">
+    <div class="page-title">
+        <h1>@T("ShoppingCart")</h1>
+    </div>
+    <div class="page-intro">
+        <div>
+            <strong>@T("PageTitle.ShoppingCart")</strong>
+            <p>Totals, updates, and next steps are kept visually obvious for mobile and desktop shoppers alike.</p>
+        </div>
+        <div class="page-intro__meta">
+            <span>Secure checkout flow</span>
+            <span>Readable order summary</span>
+            <span>Clear quantity controls</span>
+        </div>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(OrderSummaryViewComponent), new { overriddenModel = Model })
+    </div>
+</div>

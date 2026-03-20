@@ -1,0 +1,20 @@
+@using Nop.Core.Domain.Catalog
+@using Nop.Services.Helpers
+
+@inject CatalogSettings catalogSettings
+@inject IThemeContext themeContext
+
+@{
+    Layout = "";
+    var themeName = await themeContext.GetWorkingThemeNameAsync();
+
+    NopHtml.AppendCssFileParts($"~/Themes/{themeName}/Content/css/styles.css");
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Scripts/dealnest.js");
+}

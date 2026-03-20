@@ -1,0 +1,193 @@
+@using System.Linq
+@using Nop.Services.Localization
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Web.Factories
+
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+@inject ICatalogModelFactory catalogModelFactory
+
+@{
+    Layout = "_ColumnsOne";
+
+    var currentStore = await storeContext.GetCurrentStoreAsync();
+    var homepageTitle = await localizationService.GetLocalizedAsync(currentStore, s => s.HomepageTitle);
+    if (!string.IsNullOrEmpty(homepageTitle))
+    {
+        NopHtml.AddTitleParts(homepageTitle);
+    }
+
+    var homepageDescription = await localizationService.GetLocalizedAsync(currentStore, s => s.HomepageDescription);
+    if (!string.IsNullOrEmpty(homepageDescription))
+    {
+        NopHtml.AddMetaDescriptionParts(homepageDescription);
+    }
+
+    var localizedStoreName = await localizationService.GetLocalizedAsync(currentStore, s => s.Name);
+    var heroTitle = !string.IsNullOrWhiteSpace(homepageTitle) ? homepageTitle : localizedStoreName;
+    var homepageManufacturers = await catalogModelFactory.PrepareManufacturerAllModelsAsync();
+
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+
+@* Custom theme homepage override focused on reusable merchandising sections. *@
+<div class="page home-page">
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+
+        <section class="home-hero">
+            <div class="home-hero__content">
+                <span class="eyebrow">Smart picks for everyday ecommerce</span>
+                <h1>@heroTitle</h1>
+                @if (!string.IsNullOrWhiteSpace(homepageDescription))
+                {
+                    <p>@homepageDescription</p>
+                }
+                <div class="home-hero__actions">
+                    <a class="button-1 hero-primary" href="@Url.RouteUrl(NopRouteNames.General.NEW_PRODUCTS)">@T("PageTitle.NewProducts")</a>
+                    <a class="button-2 hero-secondary" href="#homepage-categories">@T("Categories")</a>
+                </div>
+                <ul class="hero-highlights">
+                    <li>Fast-loading catalogue layout</li>
+                    <li>Clear savings and pricing hierarchy</li>
+                    <li>Mobile-first product discovery</li>
+                </ul>
+            </div>
+            <div class="home-hero__panel">
+                <div class="hero-card">
+                    <span class="hero-card__label">Why it works</span>
+                    <strong>Reusable by design</strong>
+                    <p>Use the same theme for retail, clearance, or reselling stores and refine the hero imagery or copy later without changing the structure.</p>
+                </div>
+                <div class="hero-stat-grid">
+                    <article class="hero-stat">
+                        <strong>Clear CTAs</strong>
+                        <span>For promotions, categories, and conversion steps.</span>
+                    </article>
+                    <article class="hero-stat">
+                        <strong>Stable cards</strong>
+                        <span>Aspect-ratio-based media containers reduce layout shift.</span>
+                    </article>
+                    <article class="hero-stat">
+                        <strong>Accessible focus</strong>
+                        <span>Strong outlines and larger tap targets across the UI.</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+
+        <section class="home-section home-section--categories" id="homepage-categories">
+            <div class="section-heading">
+                <span class="eyebrow">Browse with confidence</span>
+                <h2>@T("Categories")</h2>
+                <p>Put high-intent collections front and center with image-led cards and enough spacing for quick scanning.</p>
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+            @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+        </section>
+
+        @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+
+        <section class="home-section">
+            <div class="section-heading">
+                <span class="eyebrow">Featured selection</span>
+                <h2>@T("Homepage.Products")</h2>
+                <p>Highlight current promotions, everyday bestsellers, or editorially selected products without changing store logic.</p>
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+            @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+        </section>
+
+        <section class="promo-band">
+            <div class="promo-band__content">
+                <span class="eyebrow">Promotions</span>
+                <h2>Use this section for weekly drops, limited-time clearance, or value bundles.</h2>
+                <p>Update copy, imagery, or a widget zone later. The layout is intentionally generic so it can flex across different stores.</p>
+            </div>
+            <div class="promo-band__actions">
+                <a class="button-1" href="@Url.RouteUrl(NopRouteNames.General.SEARCH)">@T("Search.Button")</a>
+                <a class="button-2" href="@Url.RouteUrl(NopRouteNames.General.CONTACT_US)">@T("ContactUs")</a>
+            </div>
+        </section>
+
+        @if (homepageManufacturers.Count > 0)
+        {
+            <section class="home-section home-section--brands">
+                <div class="section-heading">
+                    <span class="eyebrow">Shop by brand</span>
+                    <h2>@T("Manufacturers")</h2>
+                    <p>Highlight trusted brands with the same card treatment used across the homepage.</p>
+                </div>
+                <div class="manufacturer-grid home-page-manufacturer-grid" aria-label="@T("Manufacturers")">
+                    <div class="item-grid">
+                        @foreach (var item in homepageManufacturers.Take(6))
+                        {
+                            <div class="item-box">
+                                <article class="category-card manufacturer-card">
+                                    <div class="picture">
+                                        <a href="@(await NopUrl.RouteGenericUrlAsync<Manufacturer>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                                            <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" />
+                                        </a>
+                                    </div>
+                                    <div class="details">
+                                        <h3 class="title">
+                                            <a href="@(await NopUrl.RouteGenericUrlAsync<Manufacturer>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                                                @item.Name
+                                            </a>
+                                        </h3>
+                                        <span class="manufacturer-card__meta">@T("Manufacturers")</span>
+                                    </div>
+                                </article>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @if (homepageManufacturers.Count > 6)
+                {
+                    <div class="home-page-manufacturer-grid__actions">
+                        <a class="button-2" href="@Url.RouteUrl(NopRouteNames.General.MANUFACTURERS)">
+                            @T("Manufacturers.ViewAll")
+                        </a>
+                    </div>
+                }
+            </section>
+        }
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+        @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+
+        <section class="trust-strip">
+            <article>
+                <strong>Transparent pricing</strong>
+                <span>Show current price, previous price, and urgency styling without crowding the layout.</span>
+            </article>
+            <article>
+                <strong>Easy checkout</strong>
+                <span>Forms, panels, and totals are sized for mobile shoppers first.</span>
+            </article>
+            <article>
+                <strong>Reusable sections</strong>
+                <span>Most of the page stays configurable through widgets, topics, menu settings, and standard nopCommerce data.</span>
+            </article>
+        </section>
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeNews })
+        @await Component.InvokeAsync(typeof(HomepageNewsViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforePoll })
+        @await Component.InvokeAsync(typeof(HomepagePollsViewComponent))
+
+        <section class="newsletter-spotlight">
+            <div class="section-heading">
+                <span class="eyebrow">Stay in the loop</span>
+                <h2>@T("Newsletter.Title")</h2>
+                <p>Use this block for launches, discounts, or restock alerts without coupling the theme to a specific marketing plugin.</p>
+            </div>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </section>
+
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+    </div>
+</div>

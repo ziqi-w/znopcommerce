@@ -1,0 +1,31 @@
+@model IList<CategoryModel>
+
+@using Nop.Core.Domain.Catalog
+
+@if (Model.Count > 0)
+{
+    <section class="category-grid home-page-category-grid">
+        <div class="item-grid">
+            @foreach (var item in Model)
+            {
+                <article class="item-box">
+                    <div class="category-card">
+                        <div class="picture">
+                            <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                                <img alt="@item.PictureModel.AlternateText" src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" loading="lazy" decoding="async" />
+                            </a>
+                        </div>
+                        <div class="details">
+                            <h3 class="title">
+                                <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))" title="@item.PictureModel.Title">
+                                    @item.Name
+                                </a>
+                            </h3>
+                            <a class="text-link" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = item.SeName }))">@T("Categories")</a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}

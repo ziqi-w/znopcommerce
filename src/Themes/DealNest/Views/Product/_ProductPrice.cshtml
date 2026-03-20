@@ -1,0 +1,76 @@
+@model ProductPriceModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+
+@inject IWorkContext workContext
+
+@if (!Model.CustomerEntersPrice)
+{
+    var displayPrice = !string.IsNullOrWhiteSpace(Model.PriceWithDiscount) ? Model.PriceWithDiscount : Model.Price;
+    var displayPriceValue = Model.PriceWithDiscountValue ?? Model.PriceValue;
+    var comparePrice = !string.IsNullOrWhiteSpace(Model.OldPrice) ? Model.OldPrice : (!string.IsNullOrWhiteSpace(Model.PriceWithDiscount) ? Model.Price : string.Empty);
+    var comparePriceValue = Model.OldPriceValue ?? (!string.IsNullOrWhiteSpace(Model.PriceWithDiscount) ? Model.PriceValue : null);
+    var savingsValue = comparePriceValue.HasValue && displayPriceValue.HasValue && comparePriceValue.Value > displayPriceValue.Value
+        ? comparePriceValue.Value - displayPriceValue.Value
+        : 0m;
+    var savingsPercent = savingsValue > 0m && comparePriceValue.HasValue && comparePriceValue.Value > 0
+        ? (int)Math.Round((savingsValue / comparePriceValue.Value) * 100m, MidpointRounding.AwayFromZero)
+        : 0;
+
+    <div class="prices prices--detail">
+        @if (Model.CallForPrice)
+        {
+            <div class="product-price call-for-price">
+                <span>@T("Products.CallForPrice")</span>
+            </div>
+        }
+        else
+        {
+            if (Model.IsRental)
+            {
+                <div class="rental-price">
+                    <span>@T("Products.Price.RentalPrice"):</span>
+                    <span>@Model.RentalPrice</span>
+                </div>
+            }
+
+            <div class="price-callout">
+                @if (!string.IsNullOrWhiteSpace(comparePrice))
+                {
+                    <div class="old-product-price">
+                        <span>@T("Products.Price.OldPrice"):</span>
+                        <span>@comparePrice</span>
+                    </div>
+                }
+                <div class="product-price current-product-price">
+                    <span class="current-product-price__label">@T("Products.Price")</span>
+                    <span id="price-value-@(Model.ProductId)" class="price-value-@(Model.ProductId)">
+                        @Html.Raw(displayPrice)
+                    </span>
+                </div>
+                @if (savingsPercent > 0)
+                {
+                    <div class="price-savings">
+                        <span class="price-savings__badge">@T("ShoppingCart.ItemYouSave", $"{savingsPercent}%")</span>
+                    </div>
+                }
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.BasePricePAngV))
+            {
+                <div class="base-price-pangv" id="base-price-pangv-@Model.ProductId">
+                    @Model.BasePricePAngV
+                </div>
+            }
+
+            @if (Model.DisplayTaxShippingInfo)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <div class="tax-shipping-info">
+                    @T(inclTax ? "Products.Price.TaxShipping.InclTax" : "Products.Price.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))
+                </div>
+            }
+        }
+    </div>
+}
