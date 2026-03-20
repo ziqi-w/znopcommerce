@@ -42,3 +42,18 @@ $RECYCLE.BIN/
 .Trash-*
 .nfs*
 
+# IDE and local workspace files
+.idea/
+.vs/
+*.user
+*.suo
+
+# .NET build output under src
+src/**/bin/
+src/**/obj/
+
+# Generated web thumbnails
+src/**/wwwroot/images/thumbs/
+
+# Extra Finder metadata inside src
+src/**/.DS_Store

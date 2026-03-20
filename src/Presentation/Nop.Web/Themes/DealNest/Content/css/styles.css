@@ -3379,7 +3379,20 @@ tbody tr:last-child td {
 }
 
 .payment-method .use-reward-points {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
     margin-bottom: var(--dn-space-5);
+}
+
+.payment-method .use-reward-points input[type="checkbox"] {
+    flex: 0 0 auto;
+    margin: 0.2rem 0 0;
+}
+
+.payment-method .use-reward-points label {
+    flex: 1 1 auto;
+    margin: 0;
 }
 
 .payment-method .method-list {
@@ -3400,6 +3413,11 @@ tbody tr:last-child td {
     border-radius: var(--dn-radius-xl);
     background: #fff;
     box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+}
+
+.payment-method .method-list li:only-child {
+    flex: 0 1 420px;
+    max-width: 420px;
 }
 
 .payment-method .method-name {
@@ -3458,6 +3476,215 @@ tbody tr:last-child td {
     border-color: rgba(15, 118, 110, 0.28);
     background: rgba(15, 118, 110, 0.04);
     box-shadow: 0 18px 38px rgba(15, 118, 110, 0.1);
+}
+
+.payment-info-page .latipay-payment-info,
+.opc .payment-info .latipay-payment-info,
+.latipay-retry-page .latipay-payment-info {
+    text-align: left;
+}
+
+.payment-info-page .latipay-payment-info__headline,
+.opc .payment-info .latipay-payment-info__headline,
+.latipay-retry-page .latipay-payment-info__headline {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dn-color-text-heading);
+}
+
+.payment-info-page .latipay-payment-info__notice,
+.opc .payment-info .latipay-payment-info__notice,
+.latipay-retry-page .latipay-payment-info__notice {
+    max-width: none;
+    margin: 0 0 1rem;
+    color: var(--dn-color-text-body);
+    line-height: 1.6;
+}
+
+.payment-info-page .latipay-payment-info__selection,
+.opc .payment-info .latipay-payment-info__selection,
+.latipay-retry-page .latipay-payment-info__selection {
+    margin-top: var(--dn-space-6);
+}
+
+.payment-info-page .latipay-payment-info__label,
+.opc .payment-info .latipay-payment-info__label,
+.latipay-retry-page .latipay-payment-info__label {
+    margin-bottom: var(--dn-space-4);
+}
+
+.payment-info-page .latipay-payment-info__label label,
+.opc .payment-info .latipay-payment-info__label label,
+.latipay-retry-page .latipay-payment-info__label label {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dn-color-text-heading);
+}
+
+.payment-info-page .latipay-option-grid,
+.opc .payment-info .latipay-option-grid,
+.latipay-retry-page .latipay-option-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--dn-space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.payment-info-page .latipay-option-grid__item,
+.opc .payment-info .latipay-option-grid__item,
+.latipay-retry-page .latipay-option-grid__item {
+    position: relative;
+    flex: 1 1 260px;
+    min-width: 240px;
+    margin: 0;
+}
+
+.payment-info-page .latipay-option-grid__item:only-child,
+.opc .payment-info .latipay-option-grid__item:only-child,
+.latipay-retry-page .latipay-option-grid__item:only-child {
+    flex: 0 1 420px;
+    max-width: 420px;
+}
+
+.payment-info-page .latipay-option-card__input,
+.opc .payment-info .latipay-option-card__input,
+.latipay-retry-page .latipay-option-card__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.payment-info-page .latipay-option-card,
+.opc .payment-info .latipay-option-card,
+.latipay-retry-page .latipay-option-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--dn-space-4);
+    align-items: start;
+    min-height: 128px;
+    padding: var(--dn-space-5);
+    border: 1px solid var(--dn-color-border);
+    border-radius: var(--dn-radius-xl);
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+    transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.payment-info-page .latipay-option-card:hover,
+.opc .payment-info .latipay-option-card:hover,
+.latipay-retry-page .latipay-option-card:hover {
+    border-color: rgba(15, 118, 110, 0.24);
+    box-shadow: 0 18px 38px rgba(15, 118, 110, 0.1);
+    transform: translateY(-1px);
+}
+
+.payment-info-page .latipay-option-card__input:focus + .latipay-option-card,
+.opc .payment-info .latipay-option-card__input:focus + .latipay-option-card,
+.latipay-retry-page .latipay-option-card__input:focus + .latipay-option-card {
+    outline: 2px solid #1c79ff;
+    outline-offset: 3px;
+}
+
+.payment-info-page .latipay-option-card__input:checked + .latipay-option-card,
+.opc .payment-info .latipay-option-card__input:checked + .latipay-option-card,
+.latipay-retry-page .latipay-option-card__input:checked + .latipay-option-card {
+    border-color: rgba(15, 118, 110, 0.28);
+    background: rgba(15, 118, 110, 0.04);
+    box-shadow: 0 18px 38px rgba(15, 118, 110, 0.1);
+}
+
+.payment-info-page .latipay-option-card__logo,
+.opc .payment-info .latipay-option-card__logo,
+.latipay-retry-page .latipay-option-card__logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    min-height: 88px;
+    padding: 0.75rem;
+    border: 1px solid var(--dn-color-border);
+    border-radius: var(--dn-radius-lg);
+    background: rgba(243, 244, 246, 0.68);
+}
+
+.payment-info-page .latipay-option-card__logo img,
+.opc .payment-info .latipay-option-card__logo img,
+.latipay-retry-page .latipay-option-card__logo img {
+    max-width: 100%;
+    max-height: 56px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.payment-info-page .latipay-option-card__details,
+.opc .payment-info .latipay-option-card__details,
+.latipay-retry-page .latipay-option-card__details {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 0.75rem;
+    row-gap: 0.45rem;
+    align-items: start;
+    min-width: 0;
+}
+
+.payment-info-page .latipay-option-card__indicator,
+.opc .payment-info .latipay-option-card__indicator,
+.latipay-retry-page .latipay-option-card__indicator {
+    width: 16px;
+    height: 16px;
+    margin-top: 0.18rem;
+    border: 1.5px solid #98a2b3;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: inset 0 0 0 4px #fff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.payment-info-page .latipay-option-card__input:checked + .latipay-option-card .latipay-option-card__indicator,
+.opc .payment-info .latipay-option-card__input:checked + .latipay-option-card .latipay-option-card__indicator,
+.latipay-retry-page .latipay-option-card__input:checked + .latipay-option-card .latipay-option-card__indicator {
+    border-color: #2563eb;
+    box-shadow: inset 0 0 0 4px #fff, inset 0 0 0 8px #2563eb;
+}
+
+.payment-info-page .latipay-option-card__copy,
+.opc .payment-info .latipay-option-card__copy,
+.latipay-retry-page .latipay-option-card__copy {
+    min-width: 0;
+}
+
+.payment-info-page .latipay-option-card__title,
+.opc .payment-info .latipay-option-card__title,
+.latipay-retry-page .latipay-option-card__title {
+    display: block;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--dn-color-text-heading);
+}
+
+.payment-info-page .latipay-option-card__meta,
+.opc .payment-info .latipay-option-card__meta,
+.latipay-retry-page .latipay-option-card__meta {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--dn-color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.page.latipay-retry-page .page-body {
+    max-width: none;
+    margin: 0;
 }
 
 .opc .buttons,
@@ -3554,6 +3781,47 @@ tbody tr:last-child td {
 
 .order-details-page .section.products {
     gap: var(--dn-space-5);
+}
+
+.order-details-page .payment-method-info .info-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+}
+
+.order-details-page .payment-method-info .payment-method-status {
+    margin-bottom: 0.5rem;
+}
+
+.order-details-page .payment-method-info .repost {
+    margin-top: 0.35rem;
+}
+
+.order-details-page .payment-method-info .repost form {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+}
+
+.order-details-page .payment-method-info .repost .button-2.re-order-button {
+    min-width: 152px;
+    background: var(--dn-color-accent);
+    border-color: transparent;
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(249, 115, 22, 0.24);
+}
+
+.order-details-page .payment-method-info .repost .button-2.re-order-button:hover,
+.order-details-page .payment-method-info .repost .button-2.re-order-button:focus {
+    background: var(--dn-color-accent-hover);
+    border-color: transparent;
+    color: #fff;
+}
+
+.order-details-page .payment-method-info .repost .hint {
+    margin: 0;
 }
 
 .order-details-page .selected-checkout-attributes,
@@ -6092,6 +6360,53 @@ tbody tr:last-child td {
         border-color: rgba(220, 38, 38, 0.32);
         background: rgba(220, 38, 38, 0.14);
         color: #b91c1c;
+    }
+
+    .payment-info-page .latipay-option-grid,
+    .opc .payment-info .latipay-option-grid,
+    .latipay-retry-page .latipay-option-grid {
+        gap: 1rem;
+    }
+
+    .payment-info-page .latipay-option-grid__item,
+    .opc .payment-info .latipay-option-grid__item,
+    .latipay-retry-page .latipay-option-grid__item {
+        flex-basis: 100%;
+        min-width: 0;
+    }
+
+    .payment-info-page .latipay-option-card,
+    .opc .payment-info .latipay-option-card,
+    .latipay-retry-page .latipay-option-card {
+        min-height: 116px;
+        padding: 1rem;
+        gap: 0.85rem;
+    }
+
+    .payment-info-page .latipay-option-card__logo,
+    .opc .payment-info .latipay-option-card__logo,
+    .latipay-retry-page .latipay-option-card__logo {
+        width: 76px;
+        min-height: 76px;
+        padding: 0.65rem;
+    }
+
+    .payment-info-page .latipay-option-card__logo img,
+    .opc .payment-info .latipay-option-card__logo img,
+    .latipay-retry-page .latipay-option-card__logo img {
+        max-height: 48px;
+    }
+
+    .payment-info-page .latipay-option-card__title,
+    .opc .payment-info .latipay-option-card__title,
+    .latipay-retry-page .latipay-option-card__title {
+        font-size: 1rem;
+    }
+
+    .payment-info-page .latipay-option-card__meta,
+    .opc .payment-info .latipay-option-card__meta,
+    .latipay-retry-page .latipay-option-card__meta {
+        font-size: 0.95rem;
     }
 
     .td-title {

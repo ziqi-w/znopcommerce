@@ -1,0 +1,16 @@
+@model ReturnStatusModel
+@{
+    Layout = "_ColumnsOne";
+}
+
+<div class="page latipay-return-page">
+    <div class="page-title">
+        <h1>@T("Plugins.Payments.Latipay.Return.Pending")</h1>
+    </div>
+    <div class="page-body">
+        <p>@Model.Message</p>
+        <p class="text-muted">
+            TODO: Redirect to a richer order-specific pending page after safe reconciliation is implemented.
+        </p>
+    </div>
+</div>

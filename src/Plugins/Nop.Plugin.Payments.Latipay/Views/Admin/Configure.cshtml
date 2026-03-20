@@ -1,0 +1,431 @@
+@model ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="Latipay" asp-action="Configure" method="post">
+    <input asp-for="ActiveStoreScopeConfiguration" type="hidden" />
+    <input asp-for="ApiKeyConfigured" type="hidden" />
+    <input asp-for="CardPrivateKeyConfigured" type="hidden" />
+
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.General")
+            </div>
+            <div class="card-body">
+                <p class="text-muted">@T("Plugins.Payments.Latipay.Configuration.Instructions")</p>
+
+                @if (Model.ActiveStoreScopeConfiguration > 0)
+                {
+                    <div class="alert alert-warning">
+                        @T("Plugins.Payments.Latipay.Configuration.StoreScopeNotice")
+                    </div>
+                }
+
+                <div class="alert alert-info">
+                    @T("Plugins.Payments.Latipay.Configuration.CurrencyNotice")
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Enabled" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Enabled" />
+                        <span asp-validation-for="Enabled"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="UseSandbox" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseSandbox" />
+                        <span asp-validation-for="UseSandbox"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ApiBaseUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ApiBaseUrl" />
+                        <span asp-validation-for="ApiBaseUrl"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="RequestTimeoutSeconds" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="RequestTimeoutSeconds" />
+                        <span asp-validation-for="RequestTimeoutSeconds"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="SupportedCurrencyCode" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="SupportedCurrencyCode" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="SupportedCurrencyCode"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DebugLogging" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DebugLogging" />
+                        <span asp-validation-for="DebugLogging"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.LegacyCredentials")
+            </div>
+            <div class="card-body">
+                <p class="text-muted">@T("Plugins.Payments.Latipay.Configuration.LegacyCredentials.Help")</p>
+
+                <div class="alert @(Model.ApiKeyConfigured ? "alert-success" : "alert-secondary")">
+                    @(Model.ApiKeyConfigured
+                        ? T("Plugins.Payments.Latipay.Configuration.ApiKeyConfigured")
+                        : T("Plugins.Payments.Latipay.Configuration.ApiKeyNotConfigured"))
+                    <br />
+                    @T("Plugins.Payments.Latipay.Configuration.ApiKeyReplaceHint")
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="UserId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UserId" />
+                        <span asp-validation-for="UserId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="WalletId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="WalletId" />
+                        <span asp-validation-for="WalletId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ApiKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ApiKey" html-attributes="@(new { autocomplete = "new-password", value = string.Empty, type = "password" })" />
+                        <span asp-validation-for="ApiKey"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.CardCredentials")
+            </div>
+            <div class="card-body">
+                <p class="text-muted">@T("Plugins.Payments.Latipay.Configuration.CardCredentials.Help")</p>
+
+                <div class="alert @(Model.CardPrivateKeyConfigured ? "alert-success" : "alert-secondary")">
+                    @(Model.CardPrivateKeyConfigured
+                        ? T("Plugins.Payments.Latipay.Configuration.CardPrivateKeyConfigured")
+                        : T("Plugins.Payments.Latipay.Configuration.CardPrivateKeyNotConfigured"))
+                    <br />
+                    @T("Plugins.Payments.Latipay.Configuration.CardPrivateKeyReplaceHint")
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CardApiBaseUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CardApiBaseUrl" />
+                        <span asp-validation-for="CardApiBaseUrl"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CardMerchantId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CardMerchantId" />
+                        <span asp-validation-for="CardMerchantId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CardSiteId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CardSiteId" />
+                        <span asp-validation-for="CardSiteId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CardPrivateKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CardPrivateKey" html-attributes="@(new { autocomplete = "new-password", value = string.Empty, type = "password" })" />
+                        <span asp-validation-for="CardPrivateKey"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.PaymentMethods")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableAlipay" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableAlipay" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableAlipay">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="AlipayDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="AlipayDisplayName" />
+                            <span asp-validation-for="AlipayDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableWechatPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableWechatPay" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableWechatPay">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="WechatPayDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="WechatPayDisplayName" />
+                            <span asp-validation-for="WechatPayDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableNzBanks" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableNzBanks" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableNzBanks">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="NzBanksDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="NzBanksDisplayName" />
+                            <span asp-validation-for="NzBanksDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnablePayId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnablePayId" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnablePayId">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="PayIdDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="PayIdDisplayName" />
+                            <span asp-validation-for="PayIdDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableUpiUpop" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableUpiUpop" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableUpiUpop">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="UpiUpopDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="UpiUpopDisplayName" />
+                            <span asp-validation-for="UpiUpopDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableCardVm" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableCardVm" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableCardVm">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CardVmDisplayName" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="CardVmDisplayName" />
+                            <span asp-validation-for="CardVmDisplayName"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.Advanced")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableRefunds" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableRefunds" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableRefunds">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="EnablePartialRefunds" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="EnablePartialRefunds" />
+                            <span asp-validation-for="EnablePartialRefunds"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="EnableReconciliationTask" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="EnableReconciliationTask" />
+                    </div>
+                </div>
+                <nop-nested-setting asp-for="EnableReconciliationTask">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ReconciliationPeriodMinutes" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ReconciliationPeriodMinutes" />
+                            <span asp-validation-for="ReconciliationPeriodMinutes"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="RetryGuardMinutes" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="RetryGuardMinutes" />
+                        <span asp-validation-for="RetryGuardMinutes"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="submit" name="save" class="btn btn-primary">
+                            @T("Admin.Common.Save")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form asp-controller="Latipay" asp-action="ManualReconcile" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-header">
+                @T("Plugins.Payments.Latipay.Configuration.Operations")
+            </div>
+            <div class="card-body">
+                <p class="text-muted">@T("Plugins.Payments.Latipay.ManualReconcile.Hint")</p>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ManualReconcileMerchantReference" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ManualReconcileMerchantReference" />
+                        <span asp-validation-for="ManualReconcileMerchantReference"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ManualReconcileOrderId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ManualReconcileOrderId" />
+                        <span asp-validation-for="ManualReconcileOrderId"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="submit" class="btn btn-secondary">
+                            @T("Plugins.Payments.Latipay.ManualReconcile.Button")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

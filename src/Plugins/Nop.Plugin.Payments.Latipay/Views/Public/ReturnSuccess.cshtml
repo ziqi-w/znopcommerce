@@ -1,0 +1,16 @@
+@model ReturnStatusModel
+@{
+    Layout = "_ColumnsOne";
+}
+
+<div class="page latipay-return-page">
+    <div class="page-title">
+        <h1>@T("Plugins.Payments.Latipay.Return.Success")</h1>
+    </div>
+    <div class="page-body">
+        <p>@Model.Message</p>
+        <p class="text-muted">
+            TODO: Use this view once the return flow can safely confirm a paid order after reconciliation.
+        </p>
+    </div>
+</div>
