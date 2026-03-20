@@ -89,8 +89,6 @@ public class LatipayPaymentMethod : LatipayPlugin, IPaymentMethod
         }
 
         StoreSelectedSubPaymentMethod(processPaymentRequest, selectedMethod);
-
-        // TODO: Persist richer attempt metadata once the hosted redirect flow is implemented.
         return new ProcessPaymentResult
         {
             NewPaymentStatus = PaymentStatus.Pending

@@ -128,6 +128,7 @@ public class LatipayPublicController : BasePublicController
     {
         var result = await _latipayReturnService.ProcessReturnAsync(BuildStatusNotification(Request.Query));
         var model = await _latipayModelFactory.PrepareReturnStatusModelAsync(
+            result.OrderId,
             result.MerchantReference,
             result.Status,
             result.Message);

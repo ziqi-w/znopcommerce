@@ -6,6 +6,7 @@ using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Messages;
 using Nop.Services.Security;
+using Nop.Services.ScheduleTasks;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
@@ -23,18 +24,21 @@ public class LatipayController : BasePaymentController
     private readonly ILatipayReconciliationService _latipayReconciliationService;
     private readonly ILocalizationService _localizationService;
     private readonly INotificationService _notificationService;
+    private readonly IScheduleTaskService _scheduleTaskService;
     private readonly ISettingService _settingService;
 
     public LatipayController(LatipayModelFactory latipayModelFactory,
         ILatipayReconciliationService latipayReconciliationService,
         ILocalizationService localizationService,
         INotificationService notificationService,
+        IScheduleTaskService scheduleTaskService,
         ISettingService settingService)
     {
         _latipayModelFactory = latipayModelFactory;
         _latipayReconciliationService = latipayReconciliationService;
         _localizationService = localizationService;
         _notificationService = notificationService;
+        _scheduleTaskService = scheduleTaskService;
         _settingService = settingService;
     }
 
@@ -100,8 +104,8 @@ public class LatipayController : BasePaymentController
         if (!string.IsNullOrWhiteSpace(model.CardPrivateKey))
             settings.CardPrivateKey = NormalizeSecret(model.CardPrivateKey);
 
-        // TODO: Wire the reconciliation task enablement and period updates.
         await _settingService.SaveSettingAsync(settings);
+        await SaveReconciliationTaskAsync(settings);
         await _settingService.ClearCacheAsync();
 
         _notificationService.SuccessNotification(await _localizationService.GetResourceAsync("Admin.Plugins.Saved"));
@@ -162,5 +166,34 @@ public class LatipayController : BasePaymentController
         return string.IsNullOrWhiteSpace(value)
             ? string.Empty
             : value.Trim();
+    }
+
+    private async Task SaveReconciliationTaskAsync(LatipaySettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+
+        var scheduleTask = await _scheduleTaskService.GetTaskByTypeAsync(LatipayDefaults.ReconciliationTaskType);
+        if (scheduleTask is null)
+        {
+            await _scheduleTaskService.InsertTaskAsync(new Nop.Core.Domain.ScheduleTasks.ScheduleTask
+            {
+                Name = LatipayDefaults.ReconciliationTaskName,
+                Type = LatipayDefaults.ReconciliationTaskType,
+                Enabled = settings.EnableReconciliationTask,
+                Seconds = settings.ReconciliationPeriodMinutes * 60,
+                StopOnError = false,
+                LastEnabledUtc = settings.EnableReconciliationTask ? DateTime.UtcNow : null
+            });
+
+            return;
+        }
+
+        if (!scheduleTask.Enabled && settings.EnableReconciliationTask)
+            scheduleTask.LastEnabledUtc = DateTime.UtcNow;
+
+        scheduleTask.Enabled = settings.EnableReconciliationTask;
+        scheduleTask.Seconds = settings.ReconciliationPeriodMinutes * 60;
+
+        await _scheduleTaskService.UpdateTaskAsync(scheduleTask);
     }
 }

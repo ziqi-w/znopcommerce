@@ -9,8 +9,13 @@
     </div>
     <div class="page-body">
         <p>@Model.Message</p>
-        <p class="text-muted">
-            TODO: Redirect to a richer order-specific pending page after safe reconciliation is implemented.
-        </p>
+        @if (Model.OrderId.HasValue)
+        {
+            <div class="buttons">
+                <a class="button-1 order-details-button" href="@Url.RouteUrl(NopRouteNames.Standard.ORDER_DETAILS, new { orderId = Model.OrderId.Value })">
+                    @T("Account.CustomerOrders.OrderDetails")
+                </a>
+            </div>
+        }
     </div>
 </div>

@@ -7,6 +7,8 @@ namespace Nop.Plugin.Payments.Latipay.Models.Public;
 /// </summary>
 public record ReturnStatusModel : BaseNopModel
 {
+    public int? OrderId { get; set; }
+
     public string MerchantReference { get; set; }
 
     public string Status { get; set; }

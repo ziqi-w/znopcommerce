@@ -125,10 +125,11 @@ public class LatipayModelFactory
         return model;
     }
 
-    public Task<ReturnStatusModel> PrepareReturnStatusModelAsync(string merchantReference, string status, string message)
+    public Task<ReturnStatusModel> PrepareReturnStatusModelAsync(int? orderId, string merchantReference, string status, string message)
     {
         return Task.FromResult(new ReturnStatusModel
         {
+            OrderId = orderId,
             MerchantReference = merchantReference,
             Status = status,
             Message = message
