@@ -4274,6 +4274,28 @@ tbody tr:last-child td {
     box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
 }
 
+.login-page .returning-wrapper .message-error {
+    margin: 0 0 var(--dn-space-5);
+    padding: 1rem 1.25rem;
+    border-color: rgba(239, 68, 68, 0.2);
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(254, 242, 242, 0.95), rgba(255, 255, 255, 0.98));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 4px 12px rgba(239, 68, 68, 0.08);
+}
+
+.login-page .returning-wrapper .message-error:empty {
+    display: none;
+}
+
+.login-page .returning-wrapper .message-error ul {
+    margin: 0.65rem 0 0;
+    padding-left: 1.4rem;
+}
+
+.login-page .returning-wrapper .message-error li {
+    margin: 0;
+}
+
 .login-page .new-wrapper .buttons,
 .login-page .returning-wrapper .buttons,
 .registration-page .buttons {

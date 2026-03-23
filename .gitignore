@@ -45,15 +45,35 @@ $RECYCLE.BIN/
 # IDE and local workspace files
 .idea/
 .vs/
+.vscode/
 *.user
 *.suo
+*.rsuser
 
 # .NET build output under src
 src/**/bin/
 src/**/obj/
 
+# Test and coverage output
+TestResults/
+src/**/TestResults/
+*.coverage
+*.coveragexml
+
 # Generated web thumbnails
 src/**/wwwroot/images/thumbs/
+
+# nopCommerce local runtime state
+src/Presentation/Nop.Web/App_Data/DataProtectionKeys/*.xml
+!src/Presentation/Nop.Web/App_Data/DataProtectionKeys/Index.htm
+src/Presentation/Nop.Web/App_Data/plugins.json
+src/Presentation/Nop.Web/App_Data/appsettings*.json
+src/Presentation/Nop.Web/App_Data/WS.*/
+src/Presentation/Nop.Web/wwwroot/bundles/**/*.cache
+
+# Generated runtime output for custom WS plugins
+src/Presentation/Nop.Web/Plugins/WS.*/
+src/Presentation/Nop.Web/Plugins/
 
 # Extra Finder metadata inside src
 src/**/.DS_Store

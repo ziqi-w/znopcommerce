@@ -1,0 +1,387 @@
+@model ConfigurationModel
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="GoogleMerchantCenter" asp-action="Configure" method="post">
+    <div class="cards-group">
+        <div class="card card-default">
+            <div class="card-header">
+                @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.General")
+            </div>
+            <div class="card-body">
+                <p class="text-muted">@T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.Instructions")</p>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Enabled" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Enabled" />
+                        <span asp-validation-for="Enabled"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FeedToken" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="FeedToken" html-attributes="@(new { autocomplete = "off" })" />
+                        <span asp-validation-for="FeedToken"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FeedFormat" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="FeedFormat" asp-items="Model.AvailableFeedFormats" />
+                        <span asp-validation-for="FeedFormat"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DefaultCurrencyCode" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DefaultCurrencyCode" />
+                        <span asp-validation-for="DefaultCurrencyCode"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DefaultCountryCode" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DefaultCountryCode" />
+                        <span asp-validation-for="DefaultCountryCode"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FeedRegenerationIntervalMinutes" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="FeedRegenerationIntervalMinutes" />
+                        <span asp-validation-for="FeedRegenerationIntervalMinutes"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="ExportAdditionalImageLinks" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ExportAdditionalImageLinks" />
+                        <span asp-validation-for="ExportAdditionalImageLinks"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">
+                    @T("Admin.Common.Save")
+                </button>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.Selection")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="IncludeUnpublishedProducts" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="IncludeUnpublishedProducts" />
+                        <span asp-validation-for="IncludeUnpublishedProducts"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="IncludeProductsWithoutImages" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="IncludeProductsWithoutImages" />
+                        <span asp-validation-for="IncludeProductsWithoutImages"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="IncludeOutOfStockProducts" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="IncludeOutOfStockProducts" />
+                        <span asp-validation-for="IncludeOutOfStockProducts"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="SelectedStoreIds" />
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                                <script>
+                                    $(function() {
+                                        $('#@Html.IdFor(model => model.SelectedStoreIds)').select2({
+                                            closeOnSelect: false,
+                                            @if (!Model.AvailableStores.Any())
+                                            {
+                                                <text>
+                                                disabled: true,
+                                                placeholder: 'No stores available',
+                                                </text>
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="text-muted">@T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.StoreRestrictionHelp")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.Attributes")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="BrandFallbackStrategy" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="BrandFallbackStrategy" asp-items="Model.AvailableBrandFallbackStrategies" />
+                        <span asp-validation-for="BrandFallbackStrategy"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="GtinFallbackStrategy" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="GtinFallbackStrategy" asp-items="Model.AvailableGtinFallbackStrategies" />
+                        <span asp-validation-for="GtinFallbackStrategy"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="MpnFallbackStrategy" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="MpnFallbackStrategy" asp-items="Model.AvailableMpnFallbackStrategies" />
+                        <span asp-validation-for="MpnFallbackStrategy"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DefaultCondition" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-select asp-for="DefaultCondition" asp-items="Model.AvailableProductConditions" />
+                        <span asp-validation-for="DefaultCondition"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.Shipping")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="IncludeShipping" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="IncludeShipping" />
+                        <span asp-validation-for="IncludeShipping"></span>
+                    </div>
+                </div>
+
+                <nop-nested-setting asp-for="IncludeShipping">
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DefaultShippingCountryCode" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DefaultShippingCountryCode" />
+                            <span asp-validation-for="DefaultShippingCountryCode"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DefaultShippingService" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DefaultShippingService" />
+                            <span asp-validation-for="DefaultShippingService"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DefaultShippingPrice" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DefaultShippingPrice" />
+                            <span asp-validation-for="DefaultShippingPrice"></span>
+                        </div>
+                    </div>
+                </nop-nested-setting>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FeedUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="FeedUrl" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="PluginFeedUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="PluginFeedUrl" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-default">
+            <div class="card-header">
+                @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Configuration.Diagnostics")
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastGenerationUtc" />
+                    </div>
+                    <div class="col-md-9">
+                        <input class="form-control" readonly="readonly" value="@(Model.LastGenerationUtc?.ToString("u") ?? string.Empty)" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastGenerationStatus" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="LastGenerationStatus" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastGeneratedItemCount" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="LastGeneratedItemCount" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastSkippedItemCount" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="LastSkippedItemCount" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastWarningCount" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="LastWarningCount" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastErrorCount" />
+                    </div>
+                    <div class="col-md-9">
+                        <input asp-for="LastErrorCount" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="LastGenerationSummary" />
+                    </div>
+                    <div class="col-md-9">
+                        <textarea asp-for="LastGenerationSummary" class="form-control" rows="5" readonly="readonly"></textarea>
+                    </div>
+                </div>
+
+                @if (Model.LastGenerationMessages.Any())
+                {
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <label class="control-label">Recent diagnostics</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Severity</th>
+                                            <th>Code</th>
+                                            <th>Product ID</th>
+                                            <th>Message</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var diagnostic in Model.LastGenerationMessages)
+                                        {
+                                            <tr>
+                                                <td>@diagnostic.Severity</td>
+                                                <td>@diagnostic.Code</td>
+                                                <td>@(diagnostic.ProductId?.ToString() ?? "-")</td>
+                                                <td>@diagnostic.Message</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</form>
+
+<form asp-controller="GoogleMerchantCenter" asp-action="GenerateNow" method="post">
+    <div class="mt-3">
+        <button type="submit" class="btn btn-info">
+            @T($"{GoogleMerchantCenterDefaults.LocaleResourcePrefix}.Actions.GenerateNow")
+        </button>
+    </div>
+</form>

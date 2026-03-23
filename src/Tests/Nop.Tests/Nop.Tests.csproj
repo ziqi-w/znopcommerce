@@ -25,7 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
-    <ProjectReference Include="..\..\Plugins\Nop.Plugin.Payments.Latipay\Nop.Plugin.Payments.Latipay.csproj" />
+    <ProjectReference Include="..\..\Plugins\WS.Plugin.Payments.Latipay\WS.Plugin.Payments.Latipay.csproj" />
   </ItemGroup>
 
   <ItemGroup>
