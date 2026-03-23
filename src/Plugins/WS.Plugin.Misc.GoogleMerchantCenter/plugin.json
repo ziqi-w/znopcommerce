@@ -1,0 +1,11 @@
+{
+  "Group": "Misc",
+  "FriendlyName": "Google Merchant Center",
+  "SystemName": "Misc.GoogleMerchantCenter",
+  "Version": "4.90.3",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "Project team",
+  "DisplayOrder": 1,
+  "FileName": "WS.Plugin.Misc.GoogleMerchantCenter.dll",
+  "Description": "Google Merchant Center product feed generation and protected feed endpoint for nopCommerce."
+}

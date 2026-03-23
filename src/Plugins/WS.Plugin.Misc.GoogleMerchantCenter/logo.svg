@@ -1,0 +1,43 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="card" x1="22" y1="18" x2="102" y2="102" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB" />
+      <stop offset="1" stop-color="#0F766E" />
+    </linearGradient>
+    <linearGradient id="bag" x1="45" y1="44" x2="72" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white" stop-opacity="0.98" />
+      <stop offset="1" stop-color="white" stop-opacity="0.9" />
+    </linearGradient>
+    <filter id="shadow" x="10" y="10" width="100" height="100" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+      <feOffset dy="6" />
+      <feGaussianBlur stdDeviation="5" />
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0588235 0 0 0 0 0.0901961 0 0 0 0 0.164706 0 0 0 0.16 0" />
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1" />
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape" />
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <rect x="18" y="18" width="84" height="84" rx="24" fill="url(#card)" />
+    <circle cx="84" cy="40" r="14" fill="white" fill-opacity="0.12" />
+    <circle cx="38" cy="81" r="12" fill="white" fill-opacity="0.08" />
+
+    <path d="M44 50H76L72.9 82.6C72.67 85.07 70.6 86.95 68.12 86.95H51.88C49.4 86.95 47.33 85.07 47.1 82.6L44 50Z" fill="url(#bag)" />
+    <path d="M51 49.5V45.6C51 40.3 55.48 36 61 36C66.52 36 71 40.3 71 45.6V49.5" stroke="white" stroke-width="4.2" stroke-linecap="round" />
+    <path d="M54 63H68" stroke="#0F172A" stroke-opacity="0.74" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M54 72H64" stroke="#0F172A" stroke-opacity="0.48" stroke-width="4" stroke-linecap="round" />
+
+    <circle cx="33" cy="43" r="5" fill="#F97316" />
+    <circle cx="46.5" cy="33" r="4.2" fill="#FACC15" />
+    <circle cx="61" cy="29" r="4.2" fill="#38BDF8" />
+    <path d="M37.5 40L43.5 35.5" stroke="white" stroke-opacity="0.78" stroke-width="3" stroke-linecap="round" />
+    <path d="M50.5 31.5L57 29.8" stroke="white" stroke-opacity="0.78" stroke-width="3" stroke-linecap="round" />
+    <path d="M65 31.5L74 38" stroke="white" stroke-opacity="0.74" stroke-width="3" stroke-linecap="round" />
+
+    <path d="M78 64H86.5" stroke="white" stroke-width="4" stroke-linecap="round" />
+    <path d="M80 73H89.5" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round" />
+    <path d="M82.5 82H90" stroke="white" stroke-opacity="0.58" stroke-width="4" stroke-linecap="round" />
+  </g>
+</svg>
