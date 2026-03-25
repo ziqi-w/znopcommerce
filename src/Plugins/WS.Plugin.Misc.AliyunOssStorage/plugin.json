@@ -1,0 +1,11 @@
+{
+  "Group": "Misc",
+  "FriendlyName": "Aliyun OSS Storage",
+  "SystemName": "Misc.AliyunOssStorage",
+  "Version": "4.90.3",
+  "SupportedVersions": [ "4.90" ],
+  "Author": "Project team",
+  "DisplayOrder": 1,
+  "FileName": "WS.Plugin.Misc.AliyunOssStorage.dll",
+  "Description": "Stores generated picture thumbnails in Aliyun OSS through nopCommerce's thumbnail service extension point."
+}

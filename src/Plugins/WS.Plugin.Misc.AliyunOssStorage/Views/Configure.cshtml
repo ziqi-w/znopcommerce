@@ -1,0 +1,184 @@
+@model ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+<form asp-controller="AliyunOssStorage" asp-action="Configure" method="post">
+    <nop-cards id="aliyun-oss-storage">
+        <nop-card asp-name="aliyun-oss-storage-config"
+                  asp-icon="fas fa-cloud"
+                  asp-title="@T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Title")"
+                  asp-hide-block-attribute-name="aliyun-oss-storage-general"
+                  asp-hide="false"
+                  asp-advanced="false">
+            <div class="card-body">
+                <p class="text-muted">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Instructions")
+                </p>
+
+                <div class="alert alert-warning">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Warning.ThumbsOnly")
+                    <br />
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Warning.OriginalImages")
+                </div>
+
+                <div class="alert alert-info">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Help.CustomBaseUrlOptional")
+                    <br />
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Help.LocalFallback")
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Enabled" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Enabled" />
+                        <span asp-validation-for="Enabled"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Endpoint" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Endpoint" />
+                        <span asp-validation-for="Endpoint"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="BucketName" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="BucketName" />
+                        <span asp-validation-for="BucketName"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="Region" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="Region" />
+                        <span asp-validation-for="Region"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AccessKeyId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AccessKeyId" html-attributes="@(new { autocomplete = "off" })" />
+                        <span asp-validation-for="AccessKeyId"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="AccessKeySecret" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="AccessKeySecret" html-attributes="@(new { autocomplete = "new-password" })" />
+                        <span asp-validation-for="AccessKeySecret"></span>
+                        @if (Model.HasStoredAccessKeySecret)
+                        {
+                            <span class="form-text text-muted">
+                                @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".AccessKeySecret.KeepExisting")
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="UseHttps" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseHttps" />
+                        <span asp-validation-for="UseHttps"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="CustomBaseUrl" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CustomBaseUrl" />
+                        <span asp-validation-for="CustomBaseUrl"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="BaseThumbPathPrefix" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="BaseThumbPathPrefix" />
+                        <span asp-validation-for="BaseThumbPathPrefix"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="DeleteLocalThumbAfterUpload" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="DeleteLocalThumbAfterUpload" />
+                        <span asp-validation-for="DeleteLocalThumbAfterUpload"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="FallbackToLocalOnFailure" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="FallbackToLocalOnFailure" />
+                        <span asp-validation-for="FallbackToLocalOnFailure"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" name="save" class="btn btn-primary">
+                    @T("Admin.Common.Save")
+                </button>
+                <button type="submit" name="test-connection" class="btn btn-secondary">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".TestConnection")
+                </button>
+            </div>
+        </nop-card>
+
+        <nop-card asp-name="aliyun-oss-storage-migration"
+                  asp-icon="fas fa-upload"
+                  asp-title="@T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Migration.Title")"
+                  asp-hide-block-attribute-name="aliyun-oss-storage-migration"
+                  asp-hide="false"
+                  asp-advanced="false">
+            <div class="card-body">
+                <p class="text-muted">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Migration.Description")
+                </p>
+
+                <div class="alert alert-info">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Migration.UsesSavedSettings")
+                    <br />
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Migration.SafeDeleteNotice")
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-3">
+                        <nop-label asp-for="MigrationBatchSize" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="MigrationBatchSize" />
+                        <span asp-validation-for="MigrationBatchSize"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" name="migrate-thumbnails" class="btn btn-secondary">
+                    @T(AliyunOssStorageDefaults.LocaleResourcePrefix + ".Migration.Run")
+                </button>
+            </div>
+        </nop-card>
+    </nop-cards>
+</form>
