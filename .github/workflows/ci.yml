@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+          cache: true
+          cache-dependency-path: |
+            src/**/*.csproj
+            src/**/*.props
+            src/**/*.targets
+
+      - name: Restore
+        run: dotnet restore src/NopCommerce.sln
+
+      - name: Build
+        run: dotnet build src/NopCommerce.sln -c Release --no-restore
+
+      - name: Test
+        run: dotnet test src/Tests/Nop.Tests/Nop.Tests.csproj -c Release --no-build --verbosity normal

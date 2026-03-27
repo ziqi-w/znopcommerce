@@ -1,0 +1,25 @@
+services:
+  nopcommerce:
+    image: ${IMAGE_REPOSITORY:?set IMAGE_REPOSITORY}:${IMAGE_TAG:?set IMAGE_TAG}
+    container_name: nopcommerce-web
+    restart: unless-stopped
+    ports:
+      - "${APP_HTTP_BIND:-127.0.0.1:8080}:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      TZ: ${TZ:-UTC}
+    volumes:
+      - ./appsettings/appsettings.json:/app/App_Data/appsettings.json:ro
+      - ./app_data/DataProtectionKeys:/app/App_Data/DataProtectionKeys
+      - ./app_data/TempUploads:/app/App_Data/TempUploads
+      - ./logs:/app/Logs
+      - ./storage/images:/app/wwwroot/images
+      - ./storage/files:/app/wwwroot/files
+      - ./storage/db_backups:/app/wwwroot/db_backups
+      - ./storage/plugins_uploaded:/app/Plugins/Uploaded
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s

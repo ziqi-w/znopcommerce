@@ -122,8 +122,12 @@ public class GoogleMerchantFeedSnapshotService : IGoogleMerchantFeedSnapshotServ
             ForceRegeneration = request.ForceRegeneration,
             StoreId = storeId > 0 ? storeId : null,
             LanguageId = languageId > 0 ? languageId : null,
-            CurrencyCode = NormalizeCode(request.CurrencyCode) ?? NormalizeCode(_settings.DefaultCurrencyCode),
-            CountryCode = NormalizeCode(request.CountryCode) ?? NormalizeCode(_settings.DefaultCountryCode)
+            CurrencyCode = GoogleMerchantFeedRequestNormalizer.NormalizeCurrencyCode(request.CurrencyCode)
+                ?? GoogleMerchantFeedRequestNormalizer.NormalizeCurrencyCode(_settings.DefaultCurrencyCode)
+                ?? GoogleMerchantCenterDefaults.DefaultCurrencyCode,
+            CountryCode = GoogleMerchantFeedRequestNormalizer.NormalizeCountryCode(request.CountryCode)
+                ?? GoogleMerchantFeedRequestNormalizer.NormalizeCountryCode(_settings.DefaultCountryCode)
+                ?? GoogleMerchantCenterDefaults.DefaultCountryCode
         };
     }
 
@@ -178,7 +182,13 @@ public class GoogleMerchantFeedSnapshotService : IGoogleMerchantFeedSnapshotServ
     private string GetSnapshotPath(GoogleMerchantFeedRequest request)
     {
         var snapshotDirectoryPath = _fileProvider.MapPath(GoogleMerchantCenterDefaults.SnapshotDirectoryPath);
-        var fileName = $"feed-s{request.StoreId.GetValueOrDefault()}-l{request.LanguageId.GetValueOrDefault()}-c{NormalizeSegment(request.CurrencyCode)}-ctry{NormalizeSegment(request.CountryCode)}.xml";
+        var currencyCode = GoogleMerchantFeedRequestNormalizer.NormalizeSnapshotSegment(
+            request.CurrencyCode,
+            GoogleMerchantCenterDefaults.DefaultCurrencyCode);
+        var countryCode = GoogleMerchantFeedRequestNormalizer.NormalizeSnapshotSegment(
+            request.CountryCode,
+            GoogleMerchantCenterDefaults.DefaultCountryCode);
+        var fileName = $"feed-s{request.StoreId.GetValueOrDefault()}-l{request.LanguageId.GetValueOrDefault()}-c{currencyCode}-ctry{countryCode}.xml";
         return _fileProvider.Combine(snapshotDirectoryPath, fileName);
     }
 
@@ -197,13 +207,4 @@ public class GoogleMerchantFeedSnapshotService : IGoogleMerchantFeedSnapshotServ
         }
     }
 
-    private static string NormalizeCode(string value)
-    {
-        return string.IsNullOrWhiteSpace(value) ? null : value.Trim().ToUpperInvariant();
-    }
-
-    private static string NormalizeSegment(string value)
-    {
-        return NormalizeCode(value) ?? "DEFAULT";
-    }
 }

@@ -46,6 +46,9 @@ public class CheckoutModelFactoryTests : ServiceTest
         _rewardPointsSettings = GetService<RewardPointsSettings>();
         _commonSettings = GetService<CommonSettings>();
 
+        _rewardPointsSettings.Enabled = true;
+        await _settingService.SaveSettingAsync(_rewardPointsSettings);
+
         _shippingSettings.ActiveShippingRateComputationMethodSystemNames.Add("FixedRateTestShippingRateComputationMethod");
         await _settingService.SaveSettingAsync(_shippingSettings);
 

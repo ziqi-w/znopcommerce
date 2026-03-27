@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+    <ProjectReference Include="..\..\Plugins\WS.Plugin.Misc.GoogleMerchantCenter\WS.Plugin.Misc.GoogleMerchantCenter.csproj" />
     <ProjectReference Include="..\..\Plugins\WS.Plugin.Payments.Latipay\WS.Plugin.Payments.Latipay.csproj" />
   </ItemGroup>
 

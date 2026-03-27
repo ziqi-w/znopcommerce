@@ -40,8 +40,8 @@ RUN apk add --no-cache icu-libs icu-data-full
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
 # installs required packages
-RUN apk add tiff --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/main/ --allow-untrusted
-RUN apk add libgdiplus --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main tiff
+RUN apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/community libgdiplus
 RUN apk add libc-dev tzdata gcompat --no-cache
 
 WORKDIR /app
